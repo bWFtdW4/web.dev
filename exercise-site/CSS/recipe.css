@@ -146,6 +146,11 @@ section.ingredients > fieldset {
 	margin-top: 1em;
 }
 
+table{
+	border-collapse: collapse;
+	border: 0.1em solid black;
+
+}
 table.table_head{
 	text-align: center;
 	white-space: pre-wrap;
@@ -162,10 +167,11 @@ table.ingredient_table td {
 	text-align: center;
 	width: 5em;
 	border: 0.1em solid black;
+	border-collapse: collapse;
 }
 
 table.ingredient_table tbody {
-	align-content: center;	
+	align-content: center;
 }
 
 section.ingredients label.bottom_margin{
