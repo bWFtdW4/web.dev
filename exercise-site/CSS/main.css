@@ -100,7 +100,7 @@ section.recipe label.title {
 section.recipe input.title {
 	width: 24em;
 	margin-bottom: 1em;
-	margin-left: 5em;
+	margin-left: 5.1em;
 }
 
 section.recipe label.avatar {
@@ -109,11 +109,11 @@ section.recipe label.avatar {
 	margin-left: 1em;
 
 }
-section.recipe img.avatar {
-	width: 24em;
-	margin-bottom: 1em;
-	margin-left: 5em;
-}
+
+img.avatar{
+	width: 12em;
+	margin-left: 4.5em;
+  }
 
 section.recipe label.category {
 	width: 2em;
@@ -124,7 +124,7 @@ section.recipe label.category {
 section.recipe select.category {
 	width: 24em;
 	margin-bottom: 1em;
-	margin-left: 5em;
+	margin-left: 5.1em;
 }
 
 section.recipe label.category_label_space {
@@ -147,6 +147,7 @@ section.recipe textarea.description {
 	height: 10em;
 	margin-bottom: 0em;
 	margin-left: 1.5em;
+	resize: none
 }
 
 section.recipe label.instruction {
@@ -159,6 +160,7 @@ section.recipe textarea.instruction {
 	height: 10em;
 	margin-bottom: 0em;
 	margin-left: 2em;
+	resize: none
 }
 
 section.recipe label.email {
@@ -181,20 +183,46 @@ section.ingredients > fieldset {
 }
 
 table.table_head{
+	text-align: center;
 	white-space: pre-wrap;
 	width: 3em;
 }
 
 table.ingredient_table th{
+	text-align: center;
 	width: 5em;
 	border: 0.1em solid black;
 }
 
 table.ingredient_table td {
+	text-align: center;
 	width: 5em;
 	border: 0.1em solid black;
 }
 
+table.ingredient_table tbody {
+	align-content: center;	
+}
+
+section.ingredients label.bottom_margin{
+	font-size: small;
+	margin-left: 0.5em;
+	margin-bottom: 2em;
+}
+
+section.ingredients > img.ingredient_avatar{
+	width: 1em;
+	height: 1em;
+}
+
+img.ingredient_avatar{
+	width: 1em;
+	height: 1em;
+}
+
+img {
+	width: 3em;
+  }
 
 
 /*
