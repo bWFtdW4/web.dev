@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="dcterms.rightsHolder" content="Mamun" />
+		<meta name="dcterms.rights" content="all rights reserved" />
+		<meta name="dcterms.dateCopyrighted" content="2023" />
+		<meta charset="utf-8" />
+        <title>Recipe-Site</title>
+        <link rel="icon" type="image/png" href="../../images/spaghetti.jpg" />
+        <link rel="stylesheet" href="../CSS/main.css" />
+    </head>
+    <body>
+        <main>
+            <article class="center">
+                <section class="recipe">
+                    <fieldset>
+                        <legend>Recipe</legend>
+                        <div>
+                            <label class="title">Title</label>
+                            <input class="title" type="text" readonly="true" value="The Title"></input>
+                        </div>
+                        <div>
+                            <label class="avatar" >Avatar</label>
+                            <img class="avatar"  src="../../images/spaghetti.jpg" style="width: 100px; height: 100px;" />
+                        </div>
+                        <div>
+                            <label class="category">Category</label>
+                            <select class="category">
+                                <option value "MAIN_COURSE">MAIN_COURSE</option>
+                                    <option value "APPETIZER">APPETIZER</option>
+                                    <option value "SNACK">SNACK</option>
+                                    <option value "DESSERT">DESSERT</option>
+                                    <option value "BREAKFAST">BREAKFAST</option>
+                                    <option value "BUFFET">BUFFET</option>
+                                    <option value "BARBEQUE">BARBEQUE</option>
+                                    <option value "ADOLESCENT">ADOLESCENT</option>
+                                    <option value "INFANT">INFANT</option>
+                            </select>
+                        </div>
+                            <div>
+                                <label class="category_label_space">Pescatarian</label>
+                                <input class="category_checkbox" type="checkbox" value="Ppescatarian">
+                                <label class="category_label">LactoOvoVegetarian</label>
+                                <input class="category_checkbox" type="checkbox" value="lactoOvoVegetarian">
+                                <label class="category_label">LactoVegetarian</label>
+                                <input class="category_checkbox" type="checkbox" value="lactoVegetarian">
+                                <label class="category_label">Vegan</label>
+                                <input class="category_checkbox" type="checkbox" value="vegan">
+                            </div>
+                        <div>
+                            <label class="description">Description</label>
+                            <textarea class="description">This is the description:
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </textarea>
+                        </div>
+                        <div>
+                            <label class="instruction">Instruction</label>
+                            <textarea class="instruction">This is the Instruction:
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ut arcu tincidunt, placerat eros id, fermentum magna. Aliquam quis egestas mi. Fusce mattis dictum massa, a sagittis quam posuere hendrerit. Phasellus laoreet, orci non blandit iaculis, orci augue pellentesque nibh, accumsan pellentesque ipsum velit vel velit. Aliquam malesuada sollicitudin laoreet. Nullam non quam nec est efficitur fringilla. Aenean lacinia sem ante, at laoreet mi rhoncus sed. Sed viverra eros lorem, vel laoreet nibh maximus ac. Vestibulum maximus condimentum maximus. Nulla luctus, odio ac elementum vehicula, orci libero hendrerit nibh, eu posuere orci odio sit amet lorem. Cras dapibus libero sit amet nibh pulvinar, quis sodales felis pellentesque. Mauris elit lorem, semper et ultricies vel, fringilla quis ex. Proin suscipit euismod nisi sed ornare. Sed quam elit, consequat a dolor nec, rhoncus laoreet sapien.
+                            </textarea>
+                        </div>
+                        <div>
+                            <label class="email">Email</label>
+                            <input class="email" type="email" readonly="true" value="default@email.com">
+                        </div>
+
+                        
+                    </fieldset>
+
+                </section>
+                <section class="ingredients">
+                    <fieldset>
+                        <legend>Ingredients</legend>
+                        <div>
+                            <table class="ingredient_table">
+                                <tr>
+                                    <th class="table_head">Avatar</th>
+                                    <th class="table_head">Alias</th>
+                                    <th class="table_head">Pescatarian</th>
+                                    <th class="table_head">LactoOvoVegetarian</th>
+                                    <th class="table_head">LactoVegetarian</th>
+                                    <th class="table_head">Vegan</th>
+                                    <th class="table_head">Amount</th>
+                                    <th class="table_head">Unit</th>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                        <div>
+                                            <img src="../../images/bandnudeln.jpg" style="width: 100px; height: 100px;" />
+                                        </div>
+                                    </td>
+                                    <div>
+                                        <td>Spaghetti</td>
+                                    </div>
+                                    <td>                                       
+                                        <input class="checkbox" type="checkbox" value="lactoOvoVegetarian">
+                                    </td>
+                                    <td>
+                                        <input class="checkbox" type="checkbox" value="lactoVegetarian">
+                                    </td>
+                                    <td>
+                                        <input class="checkbox" type="checkbox" value="vegan">
+                                    </td>
+                                    <td>
+                                        <input class="checkbox" type="checkbox" value="Pescatarian">
+                                    </td>
+                                    <td>
+                                        1
+                                    </td>
+                                    <td>
+                                        unit
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                       
+                                            <img src="../../images/tomate - c.jpg" style="width: 100px; height: 100px;" />
+                                    
+                                    </td>
+                                    <td>Tomate</td>
+                                    <td>
+                                            <input class="checkbox" type="checkbox" value="lactoOvoVegetarian">
+                                    </td>
+                                    <td>
+                                            <input class="checkbox" type="checkbox" value="lactoVegetarian">
+                                    </td>
+                                    <td>
+                                        <input class="checkbox" type="checkbox" value="vegan">
+                                    </td>
+                                    <td>
+                                        <input class="checkbox" type="checkbox" value="Pescatarian">
+                                    </td>
+                                    <td>1</td>
+                                    <td>unit</td>
+                                    </div>
+                                  </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </section>
+                <section class="illustrations">
+                    <video src="video.mp4" controls></video>
+                    <audio src="audio.mp3" controls></audio>
+                    <iframe src="document.pdf"></iframe>
+                </section>
+
+            </article>
+        </main>
+    </body>
+</html>
+
+<!--
+
+Recipe-Site (HTML & CSS)
+=================
+x- avatar (Ausgabe mittels img-Element)
+x- title
+x- category (mittels select-Element)
+x- description
+x- instruction
+x- ownerEmail (read-only)
+
+x- pescatarian
+x- lactoOvoVegetarian
+x- lactoVegetarian
+x- vegan
+
+- Tabelle für Ingredients (avatar, alias, pescatarian, lactoOvoVegetarian, lactoVegetarian, vegan)
+- zweite Sektion für Illustrationen (1 Video, 1 Audio, 1 PDF)
+
+-->
