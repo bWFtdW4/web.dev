@@ -134,7 +134,7 @@ section.recipe label.email {
 section.recipe input.email {
 	width: 24em;
 	margin-bottom: 1em;
-	margin-left: 4.5em;
+	margin-left: 3.5em;
 }
 
 
@@ -199,6 +199,7 @@ img {
 * illustrations
 */
 section.illustrations {
+	margin-top: 1em;
 	width: 50em;
 	display: flex;
 
