@@ -14,9 +14,31 @@ window.addEventListener("DOMContentLoaded", function() {
     function convertBit() {
         const bits = parseFloat(bitInput.value);
         const bytes = bits / 8;
+
+        const kilobytes = bits / 8192;
+
+        const megabytes = bits / 8388608;
+
+        const gigabytes = bits / 8589934592;
+
+        const terabytes = bits / 8796093022208;
+         
         if (!isNaN(bytes)) {
             byteInput.value = bytes;
-        } else {
+        } else if (!isNaN(kilobytes)) {
+            kilobyteInput.value = kilobytes; 
+        } else if (!isNaN(kilobytes)) {
+            kilobyteInput.value = kilobytes; 
+        } else if (!isNaN(kilobytes)) {
+            kilobyteInput.value = kilobytes; 
+        } else if (!isNaN(kilobytes)) {
+            kilobyteInput.value = kilobytes; 
+        }   
+        
+        
+        
+        
+        else {
             byteInput.value = "";
         }
     }
