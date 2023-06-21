@@ -117,5 +117,16 @@ class PreferencesController extends Object {
 
 window.addEventListener("load", event => {
 	const controller = new PreferencesController();
-	controller.activate();
+	const menuButtons = document.querySelectorAll("header > nav > button");
+	const menuButton = Array.from(menuButtons).find(button => button.classList.contains("preferences"));
+
+	menuButton.addEventListener("click", () => {
+		for (const button of menuButtons)
+			button.classList.remove("active");
+		menuButton.classList.add("active");
+	});
+
+	menuButton.addEventListener("click", () => controller.activate());
+
+	menuButton.click();
 });

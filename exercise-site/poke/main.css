@@ -1,0 +1,44 @@
+/*
+ * Main stylesheet
+*/
+body {
+	background: rgb(90, 117, 140);
+	font-family: sans-serif;
+}
+
+
+main {
+	display: flex;
+}
+
+
+main > article.left {
+	display: none;
+	width: 3em;
+}
+
+
+main > article.center {
+	width: 25em;
+}
+
+
+main > article.right {
+	display: none;
+	width: 3em;
+}
+
+
+label {
+	display: inline-block;
+}
+
+
+input {
+	display: inline-block;
+}
+
+
+img.avatar {
+	width: 6.8em;
+}
