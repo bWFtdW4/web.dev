@@ -1,0 +1,76 @@
+/*
+ * Main stylesheet for the recipe site.
+ */
+.flex {
+	display: flex;
+}
+
+.inline {
+	display: inline;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.block {
+	display: block;
+}
+
+.void {
+	display: none;
+}
+
+
+.horizontal-left {
+	text-align: left;
+}
+
+.horizontal-center {
+	text-align: center;
+}
+
+.horizontal-right {
+	text-align: right;
+}
+
+
+.vertical-top {
+	vertical-align: top;
+}
+
+.vertical-center {
+	vertical-align: middle;
+}
+
+.vertical-bottom {
+	vertical-align: bottom;
+}
+
+
+body {
+	background: AliceBlue;
+	font-family: sans-serif;
+}
+
+
+label, output, input, textarea {
+	display: inline-block;
+}
+
+
+main > article.left {
+	display: none;
+	width: 3em;
+}
+
+
+main > article.center {
+	width: 40em;
+}
+
+
+main > article.right {
+	display: none;
+	width: 3em;
+}

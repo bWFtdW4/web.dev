@@ -39,5 +39,9 @@ window.addEventListener("load", async event => {
 	preformattedElement.append("instanceB: " + instanceB + "\n");
 
 	const instanceC = await MyThing.createPublicAsynchronousThing("Hello!");
-	preformattedElement.append("instanceC: " + instanceC + "\n");
+	preformattedElement.append("instanceC: " + instanceC + "\n\n");
+
+	preformattedElement.append("instanceA.myPrivateInstanceVariable: " + instanceA.myPrivateInstanceVariable + "\n");
+	preformattedElement.append("instanceB.myPrivateInstanceVariable: " + instanceB.myPrivateInstanceVariable + "\n");
+	preformattedElement.append("instanceC.myPrivateInstanceVariable: " + instanceC.myPrivateInstanceVariable + "\n\n");
 });

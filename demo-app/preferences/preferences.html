@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="dcterms.rightsHolder" content="Sascha Baumeister" />
+		<meta name="dcterms.rights" content="all rights reserved" />
+		<meta name="dcterms.dateCopyrighted" content="2023" />
+		<meta charset="utf-8" />
+		<title>Einstellungen App</title>
+		<link rel="icon" type="image/png" href="avatar.png" />
+		<link rel="stylesheet" href="main.css" />
+		<script type="module" src="main.js"></script>
+	</head>
+	<body>
+		<header>
+			<!-- navigation: tabs, menu, ... -->
+		</header>
+		<main>
+			<article class="left">
+			</article>
+
+			<article class="center">
+				<section class="preferences">
+					<fieldset>
+						<legend>Konto</legend>
+						<div>
+							<label class="default">Avatar</label>
+							<img class="avatar" src="." ondragover="event.preventDefault()" ondrop="event.preventDefault()" />
+						</div>
+						<div>
+							<label class="default">Gruppe</label>
+							<select class="group">
+								<option value="USER">Benutzer</option>
+								<option value="ADMIN">Administrator</option>
+							</select>
+						</div>
+						<div>
+							<label class="default">ID</label>
+							<input class="identity default" type="text" readonly="true" value="42" />
+						</div>
+						<div>
+							<label class="default">Email</label>
+							<input class="email default" type="email" />
+						</div>
+						<div>
+							<label class="default">Passwort</label>
+							<input class="password default" type="password" />
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Name</legend>
+						<div>
+							<label class="default">Titel</label>
+							<input class="title default" type="text" />
+						</div>
+						<div>
+							<label class="default">Nachname</label>
+							<input class="surname default" type="text" />
+						</div>
+						<div>
+							<label class="default">Vorname</label>
+							<input class="forename default" type="text" />
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Adresse</legend>
+						<div>
+							<label class="default">Straße</label>
+							<input class="street default" type="text" />
+						</div>
+						<div>
+							<label class="default">PLZ</label>
+							<input class="postcode" type="text" />
+							<label class="city">Ort</label>
+							<input class="city" type="text" />
+						</div>
+						<div>
+							<label class="default">Staat</label>
+							<input class="country default" type="text" />
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Telefon-Nummern</legend>
+						<div class="phones" ></div>
+					</fieldset>
+					<div>
+						<button class="submit" type="button">ok</button>
+					</div>
+					<div>
+						<pre class="json"></pre>
+					</div>
+					<div>
+						<pre class="password"></pre>
+					</div>
+					<div>
+						<pre class="drop-file"></pre>
+					</div>
+
+				</section>
+			</article>
+
+			<article class="right">
+			</article>
+		</main>
+		<footer>
+			ok.
+		</footer>
+	</body>
+</html>

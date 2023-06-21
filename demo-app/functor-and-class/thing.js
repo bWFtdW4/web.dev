@@ -13,8 +13,8 @@ export default class Thing extends Object {
 	constructor (value) {
 		super();
 
-		this.#myPrivateInstanceVariable = "Test";
-		this.myPublicInstanceVariable = value;
+		this.#myPrivateInstanceVariable = value;
+		this.myPublicInstanceVariable = "Test";
 	}
 
 
@@ -24,11 +24,30 @@ export default class Thing extends Object {
 
 
 	static createPublicSynchronousThing (value) {
-		return new Thing(value);
+		return this.#createPrivateSynchronousThing(value);
 	}
 
 
 	static async createPublicAsynchronousThing (value) {
+		// return new Thing(value);
+		return this.#createPrivateSynchronousThing(value);
+	}
+
+
+	static #createPrivateSynchronousThing (value) {
 		return new Thing(value);
+	}
+
+
+	get myPrivateInstanceVariable () {
+		return this.#myPrivateInstanceVariable;
+	}
+
+
+	set myPrivateInstanceVariable (value) {
+		if (value == null) throw new RangeError();
+		if (typeof value !== "string") throw new TypeError();
+
+		this.#myPrivateInstanceVariable = value;
 	}
 }

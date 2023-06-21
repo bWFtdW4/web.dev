@@ -1,0 +1,84 @@
+/*
+ * Main stylesheet for the preferences site.
+*/
+body {
+	background: AliceBlue;
+	font-family: sans-serif;
+}
+
+
+main {
+	display: flex;
+}
+
+
+main > article.left {
+	display: none;
+	width: 3em;
+}
+
+
+main > article.center {
+	width: 25em;
+}
+
+
+main > article.right {
+	display: none;
+	width: 3em;
+}
+
+
+label {
+	display: inline-block;
+}
+
+
+input {
+	display: inline-block;
+}
+
+
+img.avatar {
+	width: 6.8em;
+}
+
+
+/*
+ * Preferences rules.
+*/
+section.preferences label.default {
+	width: 5em;
+	text-align: right;
+}
+
+
+section.preferences label.city {
+	width: 2em;
+	text-align: center;
+}
+
+
+section.preferences > fieldset {
+	width: 18em;
+}
+
+
+section.preferences > fieldset > div.phones input {
+	margin-left: 6.3em;
+}
+
+
+section.preferences > fieldset input.postcode {
+	width: 3em;
+}
+
+
+section.preferences > fieldset input.city {
+	width: 7.35em;
+}
+
+
+section.preferences > fieldset input.default {
+	width: 14em;
+}
