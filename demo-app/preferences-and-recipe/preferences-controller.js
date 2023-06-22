@@ -1,71 +1,59 @@
-const PERSON = {
-	created: 1685517075000,
-	identity: 2,
-	modified: 1686132291816,
-	version: 1,
-	email: "guest@cookbook.de",
-	group: "USER",
-	avatarReference: 1,
-	address: {
-		city: "Berlin",
-		country: "Deutschland",
-		postcode: "10557",
-		street: "Spreeweg 1"
-	},
-	name: {
-		title: null,
-		family: "Guest",
-		given: "Any"
-	},
-	phones: [ "0171/22446688", "0177/123456789"  ],
-	recipereferences: []
-};
+import Controller from "./controller.js";
 
 
-class PreferencesController extends Object {
-	#centerArticle;
+class PreferencesController extends Controller {
 
 	constructor () {
 		super();
-
-		this.#centerArticle = document.querySelector("main > article.center");
 	}
 
 
-	get centerArticle () {
-		return this.#centerArticle;
-	}
-
-
-	activate () {
+	async activate () {
 		const template = document.querySelector("head > template.preferences");
 		const preferencesSection = template.content.firstElementChild.cloneNode(true);
 
-		this.#centerArticle.innerHTML = "";
-		this.#centerArticle.append(preferencesSection);
+		this.centerArticle.innerHTML = "";
+		this.centerArticle.append(preferencesSection);
 
 		const commitButton = preferencesSection.querySelector("button.submit");
-		commitButton.addEventListener("click", event => this.commitData());
-
 		const avatarImage = preferencesSection.querySelector("img.avatar");
-		avatarImage.addEventListener("drop", event => this.commitAvatar(event.dataTransfer.files[0]));
 
-		avatarImage.src = "/services/people/" + PERSON.identity + "/avatar";
-		preferencesSection.querySelector("input.identity").value = PERSON.identity;
-		preferencesSection.querySelector("input.email").value = PERSON.email;
-		preferencesSection.querySelector("select.group").value = PERSON.group;
-		preferencesSection.querySelector("input.title").value = PERSON.name.title;
-		preferencesSection.querySelector("input.surname").value = PERSON.name.family;
-		preferencesSection.querySelector("input.forename").value = PERSON.name.given;
-		preferencesSection.querySelector("input.street").value = PERSON.address.street;
-		preferencesSection.querySelector("input.city").value = PERSON.address.city;
-		preferencesSection.querySelector("input.country").value = PERSON.address.country;
-		preferencesSection.querySelector("input.postcode").value = PERSON.address.postcode;
+		// GET /services/people/3
+		this.messageElement.value = "";
+		try {
+			const response = await fetch("/services/people/3", { method: "GET", headers: { "Accept": "application/json" }});
+			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
+			const person = await response.json();
+			this.messageElement.value = "ok";
+
+			commitButton.addEventListener("click", event => this.commitData(person));
+			avatarImage.addEventListener("drop", event => this.commitAvatar(person, event.dataTransfer.files[0]));
+
+			this.displayPerson (person);
+		} catch (error) {
+			this.messageElement.value = error.message || "a problem occurred!";
+		}
+	}
+
+
+	displayPerson (person) {
+		const preferencesSection = this.centerArticle.querySelector("section.preferences");
+		preferencesSection.querySelector("img.avatar").src = "/services/people/" + person.identity + "/avatar";
+		preferencesSection.querySelector("input.identity").value = person.identity;
+		preferencesSection.querySelector("input.email").value = person.email;
+		preferencesSection.querySelector("select.group").value = person.group;
+		preferencesSection.querySelector("input.title").value = person.name.title;
+		preferencesSection.querySelector("input.surname").value = person.name.family;
+		preferencesSection.querySelector("input.forename").value = person.name.given;
+		preferencesSection.querySelector("input.street").value = person.address.street;
+		preferencesSection.querySelector("input.city").value = person.address.city;
+		preferencesSection.querySelector("input.country").value = person.address.country;
+		preferencesSection.querySelector("input.postcode").value = person.address.postcode;
 
 		const phonesElement = preferencesSection.querySelector("fieldset > div.phones");
 		phonesElement.innerHTML = "";
 
-		for (const phone of PERSON.phones) {
+		for (const phone of person.phones) {
 			const divElement = document.createElement("div");
 			phonesElement.append(divElement);
 
@@ -78,39 +66,41 @@ class PreferencesController extends Object {
 	}
 
 
-	commitData () {
+	async commitData (person) {
 		const preferencesSection = this.centerArticle.querySelector("section.preferences");
-		const person = window.structuredClone(PERSON);
+		const personClone = window.structuredClone(person);
 
 		const password = preferencesSection.querySelector("input.password").value.trim() || null;
-		person.identity = preferencesSection.querySelector("input.identity").value.trim() || null;
-		person.email = preferencesSection.querySelector("input.email").value.trim() || null;
-		person.group = preferencesSection.querySelector("select.group").value.trim() || null;
-		person.name.title = preferencesSection.querySelector("input.title").value.trim() || null;
-		person.name.family = preferencesSection.querySelector("input.surname").value.trim() || null;
-		person.name.given = preferencesSection.querySelector("input.forename").value.trim() || null;
-		person.address.street = preferencesSection.querySelector("input.street").value.trim() || null;
-		person.address.city = preferencesSection.querySelector("input.city").value.trim() || null;
-		person.address.country = preferencesSection.querySelector("input.country").value.trim() || null;
-		person.address.postcode = preferencesSection.querySelector("input.postcode").value.trim() || null;
+		personClone.identity = preferencesSection.querySelector("input.identity").value.trim() || null;
+		personClone.email = preferencesSection.querySelector("input.email").value.trim() || null;
+		personClone.group = preferencesSection.querySelector("select.group").value.trim() || null;
+		personClone.name.title = preferencesSection.querySelector("input.title").value.trim() || null;
+		personClone.name.family = preferencesSection.querySelector("input.surname").value.trim() || null;
+		personClone.name.given = preferencesSection.querySelector("input.forename").value.trim() || null;
+		personClone.address.street = preferencesSection.querySelector("input.street").value.trim() || null;
+		personClone.address.city = preferencesSection.querySelector("input.city").value.trim() || null;
+		personClone.address.country = preferencesSection.querySelector("input.country").value.trim() || null;
+		personClone.address.postcode = preferencesSection.querySelector("input.postcode").value.trim() || null;
 
-		person.phones.length = 0;
+		personClone.phones.length = 0;
 		for (const phoneElement of preferencesSection.querySelectorAll("input.phone")) {
 			const phone = phoneElement.value.trim() || null;
-			if (phone) person.phones.push(phone);
+			if (phone) personClone.phones.push(phone);
 		}
 
-		preferencesSection.querySelector("pre.json").innerText = JSON.stringify(person);
+		preferencesSection.querySelector("pre.json").innerText = JSON.stringify(personClone);
 		preferencesSection.querySelector("pre.password").innerText = password;
 	}
 
 
-	commitAvatar (dropFile) {
+	async commitAvatar (person, dropFile) {
 		const preferencesSection = this.centerArticle.querySelector("section.preferences");
 		if (!dropFile.type.startsWith("image/")) throw new RangeError();
 
 		const preElement = preferencesSection.querySelector("pre.drop-file");
 		preElement.innerText = dropFile.name + ": " + dropFile.size;
+		
+		// call PUT /people/id/avatar
 	}
 }
 
