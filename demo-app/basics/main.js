@@ -1,5 +1,5 @@
 import { product, sum, average } from "./extended-math.js";
-import { fuzzyNot, fuzzyOr, fuzzyAnd } from "../../tool/fuzzy-logic.js";
+import { fuzzyNot, fuzzyOr, fuzzyAnd } from "../../util/fuzzy-logic.js";
 
 
 window.addEventListener("load", event => {
@@ -45,7 +45,8 @@ window.addEventListener("load", event => {
 	const x09 = undefined || "abc";
 	const x10 = "" || "abc";
 	const x11 = 0 || "abc";
-	preformattedElement.append([ x01, x02, x03, x04, x05, x06, x07, x08, x09, x10, x11 ] + "\n\n");
+	const x12 = 0.1 || 0.9;
+	preformattedElement.append([ x01, x02, x03, x04, x05, x06, x07, x08, x09, x10, x11, x12 ] + "\n\n");
 
 	// for-index
 	for (let index = 0; index < array.length; ++index) {

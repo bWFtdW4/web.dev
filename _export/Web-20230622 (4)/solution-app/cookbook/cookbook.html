@@ -5,11 +5,29 @@
 		<meta name="dcterms.rights" content="all rights reserved" />
 		<meta name="dcterms.dateCopyrighted" content="2023" />
 		<meta charset="utf-8" />
-		<title>Einstellungen & Rezept App</title>
-		<link rel="icon" type="image/png" href="avatar.png" />
+		<title>Kochbuch App</title>
+		<link rel="icon" type="image/png" href="cookbook.png" />
 		<link rel="stylesheet" href="main.css" />
+		<script type="module" src="authentication-controller.js"></script>
 		<script type="module" src="preferences-controller.js"></script>
 		<script type="module" src="recipe-controller.js"></script>
+
+		<template class="authentication">
+			<section class="authentication">
+				<fieldset>
+					<legend>Authentifizierung</legend>
+					<div>
+						<label>Email</label>
+						<input class="email default" type="email" />
+					</div>
+					<div>
+						<label>Passwort</label>
+						<input class="password default" type="password" />
+					</div>
+				</fieldset>
+				<button class="submit" type="button">ok</button>
+			</section>
+		</template>
 
 		<template class="preferences">
 			<section class="preferences">
@@ -196,6 +214,7 @@
 	<body>
 		<header>
 			<nav>
+				<button class="authentication" type="button">Authentifizierung</button>
 				<button class="preferences" type="button">Einstellungen</button>
 				<button class="recipe" type="button">Rezept</button>
 			</nav>

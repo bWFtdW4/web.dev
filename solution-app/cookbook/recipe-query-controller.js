@@ -1,4 +1,4 @@
-import Controller from "./controller.js";
+import Controller from "../../util/controller.js";
 
 
 class RecipeController extends Controller {
@@ -8,27 +8,81 @@ class RecipeController extends Controller {
 
 
 	async activate () {
-		const template = document.querySelector("head > template.recipe");
-		const recipeSection = template.content.firstElementChild.cloneNode(true);
+		console.log("recipe-query controller activating.");
+		const template = document.querySelector("head > template.recipe-query");
+		const recipeQuerySection = template.content.firstElementChild.cloneNode(true);
 
-		this.centerArticle.innerHTML = "";
-		this.centerArticle.append(recipeSection);
-		const avatarImage = recipeSection.querySelector("img.avatar");
+		while (this.centerArticle.lastElementChild)
+			this.centerArticle.lastElementChild.remove();
+		this.centerArticle.append(recipeQuerySection);
 
-		// GET /services/recipes/36
+		const searchButton = recipeQuerySection.querySelector("button.search");
+		searchButton.addEventListener("click", event => this.queryRecipes());
+	}
+
+
+	deactivate () {
+		console.log("recipe-query controller deactivating.");
+	}
+
+
+	async queryRecipes () {
+		const recipeQuerySection = this.centerArticle.querySelector("section.recipe-query");
+		const parameterization = new URLSearchParams();
+		let value;
+		
+		value = recipeQuerySection.querySelector("input.title").value || null;
+		if (value) parameterization.set("title", value);
+
+		value = recipeQuerySection.querySelector("input.description-fragment").value || null;
+		if (value) parameterization.set("description-fragment", value);
+		
+		value = recipeQuerySection.querySelector("input.instruction-fragment").value || null;
+		if (value) parameterization.set("instruction-fragment", value);
+
+		value = recipeQuerySection.querySelector("input.owner-email").value || null;
+		if (value) parameterization.set("owner-email", value);
+
+		value = recipeQuerySection.querySelector("select.category").value || null;
+		if (value) parameterization.set("category", value);
+
+		value = recipeQuerySection.querySelector("select.restriction").value || null;
+		switch (value) {
+			default:
+				break;
+			case "PESCATARIAN":
+				parameterization.set("pescetarian", "true");
+				break;
+			case "LACTO-OVO-VEGETARIAN":
+				parameterization.set("lacto-ovo-vegetarian", "true");
+				break;
+			case "LACTO-VEGETARIAN":
+				parameterization.set("lacto-vegetarian", "true");
+				break;
+			case "VEGAN":
+				parameterization.set("vegan", "true");
+				break;
+		}
+
+		let recipes = [];
 		this.messageElement.value = "";
 		try {
-			const response = await fetch("/services/recipes/36", { method: "GET", headers: { "Accept": "application/json" }});
+			// GET /services/recipes
+			const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
+			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
-			const recipe = await response.json();
+			recipes = await response.json();
 			this.messageElement.value = "ok";
-
-			avatarImage.addEventListener("drop", event => this.commitAvatar(recipe, event.dataTransfer.files[0]));
-	
-			this.displayRecipe(recipe);
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
+
+		this.displayRecipes(recipes);
+	}
+
+
+	displayRecipes (recipes) {
+		console.log(recipes);
 	}
 
 
@@ -64,7 +118,7 @@ class RecipeController extends Controller {
 	}
 
 
-	async commitAvatar (recipe, dropFile) {
+	async submitAvatar (recipe, dropFile) {
 		const recipeSection = this.centerArticle.querySelector("section.recipe");
 
 		this.messageElement.value = "";
@@ -89,13 +143,16 @@ class RecipeController extends Controller {
 window.addEventListener("load", event => {
 	const controller = new RecipeController();
 	const menuButtons = document.querySelectorAll("header > nav > button");
-	const menuButton = Array.from(menuButtons).find(button => button.classList.contains("recipe"));
+	const menuButton = Array.from(menuButtons).find(button => button.classList.contains("recipe-query"));
 
-	menuButton.addEventListener("click", () => {
+	for (const button of menuButtons) {
+		const active = button.classList.contains("recipe-query");
+		button.addEventListener("click", event => controller.active = active);
+	}
+
+	menuButton.addEventListener("click", event => {
 		for (const button of menuButtons)
 			button.classList.remove("active");
 		menuButton.classList.add("active");
 	});
-
-	menuButton.addEventListener("click", () => controller.activate());
 });

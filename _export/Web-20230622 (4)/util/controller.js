@@ -5,8 +5,6 @@
 export default class Controller extends EventTarget {
 	static #sessionOwner = null;
 
-	#centerArticle;
-	#messageElement;
 	#active;
 
 
@@ -16,25 +14,7 @@ export default class Controller extends EventTarget {
 	constructor () {
 		super();
 
-		this.#centerArticle = document.querySelector("main > article.center");
-		this.#messageElement = document.querySelector("footer > output.message");
 		this.#active = false;
-	}
-
-
-	/*
-	 * Getter for the centerArticle property.
-	 */
-	get centerArticle () {
-		return this.#centerArticle;
-	}
-
-
-	/*
-	 * Getter for the messageElement property.
-	 */
-	get messageElement () {
-		return this.#messageElement;
 	}
 
 
@@ -79,7 +59,6 @@ export default class Controller extends EventTarget {
 
 	/*
 	 * Activates this controller.
-	 * Throws an error by default, and must be overridden.
 	 */
 	activate () {
 		throw new InternalError("method should be overriden!");
@@ -88,8 +67,23 @@ export default class Controller extends EventTarget {
 
 	/*
 	 * Deactivates this controller.
-	 * Does nothing by default, but can optionally be overridden.
 	 */
 	deactivate () {
+	}
+
+
+	/*
+	 * Displays the given object in the footer's message area,
+	 * or resets it if none is given.
+	 * @param error {Object} the optional error or string, or null
+	 */
+	static displayMessage (object) {
+		const output = document.querySelector("footer output.message");
+		if (object) {
+			console.error(object);
+			output.value = object instanceof Error ? object.message : "" + object;
+		} else {
+			output.value = "";
+		}
 	}
 }

@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="dcterms.rightsHolder" content="Sascha Baumeister" />
+		<meta name="dcterms.rights" content="all rights reserved" />
+		<meta name="dcterms.dateCopyrighted" content="2023" />
+		<meta charset="utf-8" />
+		<title>Einstellungen & Rezepte (V2)</title>
+		<link rel="icon" type="image/png" href="person-avatar.png" />
+		<link rel="stylesheet" href="main.css" />
+		<script>
+			console.log(window);
+			window.addEventListener("load", event => {
+				const menuButtons = document.querySelectorAll("body > header > nav > button");
+				menuButtons[0].templateAndSectionStyleClass = "preferences";
+				menuButtons[1].templateAndSectionStyleClass = "recipe";
+
+				for (const menuButton of menuButtons)
+					menuButton.addEventListener("click", event => eventHandler(event.target));
+				menuButtons[0].click();
+
+				function eventHandler (clickedButton) {
+					const centerArticle = document.querySelector("main > article.center");
+					while(centerArticle.lastElementChild)
+						centerArticle.lastElementChild.remove();
+
+					const template = document.querySelector("template." + clickedButton.templateAndSectionStyleClass);
+					const section = template.content.firstElementChild.cloneNode(true);
+					centerArticle.append(section);
+				}
+			});
+		</script>
+
+		<template class="preferences">
+			<section class="preferences">
+				<fieldset>
+					<legend>Konto</legend>
+					<div>
+						<label class="default">Avatar</label>
+						<img class="avatar" src="person-avatar.png" />
+					</div>
+					<div>
+						<label class="default">Gruppe</label>
+						<select>
+							<option value="USER">Benutzer</option>
+							<option value="ADMIN">Administrator</option>
+						</select>
+					</div>
+					<div>
+						<label class="default">ID</label>
+						<input class="default" type="text" readonly="true" />
+					</div>
+					<div>
+						<label class="default">Email</label>
+						<input class="default" type="email" />
+					</div>
+					<div>
+						<label class="default">Passwort</label>
+						<input class="default" type="password" />
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Name</legend>
+					<div>
+						<label class="default">Titel</label>
+						<input class="default" type="text" />
+					</div>
+					<div>
+						<label class="default">Nachname</label>
+						<input class="default" type="text" />
+					</div>
+					<div>
+						<label class="default">Vorname</label>
+						<input class="default" type="text" />
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Adresse</legend>
+					<div>
+						<label class="default">Straße</label>
+						<input class="default" type="text" />
+					</div>
+					<div>
+						<label class="default">PLZ</label>
+						<input class="postcode" type="text" />
+						<label class="city">Ort</label>
+						<input class="city" type="text" />
+					</div>
+					<div>
+						<label class="default">Staat</label>
+						<input class="default" type="text" />
+					</div>
+				</fieldset>
+				<fieldset class="phones">
+					<legend>Telefon-Nummern</legend>
+					<div>
+						<input class="default" type="tel" />
+					</div>
+					<div>
+						<input class="default" type="tel" />
+					</div>
+					<div>
+						<input class="default" type="tel" />
+					</div>
+				</fieldset>
+			</section>
+		</template>
+
+		<template class="recipe">
+			<section class="recipe">
+				<div class="recipe">
+					<h1>Rezept</h1>
+					<div>
+						<label class="default">Avatar</label>
+						<img class="avatar vertical-center" src="recipe-avatar.png" />
+					</div>
+					<div class="flex">
+						<div class="left">
+							<div>
+								<label class="default">Titel</label>
+								<input class="default" type="text" />
+							</div>
+							<div>
+								<label class="default">Kategorie</label>
+								<select>
+									<option value="MAIN_COURSE">Hauptgericht</option>
+									<option value="APPETIZER">Vorspeise</option>
+									<option value="SNACK">Snack</option>
+									<option value="DESSERT">Dessert</option>
+									<option value="BREAKFAST">Frühstück</option>
+									<option value="BUFFET">Büfett</option>
+									<option value="BARBEQUE">Gegrilltes</option>
+									<option value="ADOLESCENT">Kinderportion</option>
+									<option value="INFANT">Babynahrung</option>
+								</select>
+							</div>
+							<div>
+								<label class="default">Eigner</label>
+								<input class="default" type="email" value="sascha.baumeister@gmail.com" readonly="true" />
+							</div>
+							<div>
+								<label class="default vertical-center">Pescatarisch</label>
+								<input type="checkbox" />
+							</div>
+							<div>
+								<label class="default vertical-center">Ovolacto-Vegetarisch</label>
+								<input type="checkbox" />
+							</div>
+							<div>
+								<label class="default vertical-center">Lacto-Vegetarisch</label>
+								<input type="checkbox" />
+							</div>
+							<div>
+								<label class="default vertical-center">Vegan</label>
+								<input type="checkbox" />
+							</div>
+						</div>
+						<div class="right">
+							<div>
+								<label class="block">Beschreibung</label>
+								<textarea class="default" type="text"></textarea>
+							</div>
+							<div>
+								<label class="block">Anleitung</label>
+								<textarea class="default" type="text"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="recipe-ingredients">
+					<h1>Zutaten</h1>
+					<table>
+						<thead>
+							<tr>
+								<th>Avatar</th>
+								<th>Alias</th>
+								<th>Menge</th>
+								<th>Einheit</th>
+								<th>Pescatarisch</th>
+								<th>Ovolacto-Vegetarisch</th>
+								<th>Lacto-Vegetarisch</th>
+								<th>Vegan</th>
+							</tr>
+						</thead>
+							<tr>
+								<td><img class="avatar" src="ingredient-avatar.png" /></td>
+								<td><input type="text" /></td>
+								<td><input type="number" min="0" step="1" /></td>
+								<td>
+									<select>
+										<option value="LITRE">Liter</option>
+										<option value="GRAM">Gramm</option>
+										<option value="TEASPOON">Teelöffel</option>
+										<option value="TABLESPOON">Esslöffel</option>
+										<option value="PINCH">Prise</option>
+										<option value="CUP">Tasse</option>
+										<option value="CAN">Dose</option>
+										<option value="TUBE">Tube</option>
+										<option value="BUSHEL">Bündel</option>
+										<option value="PIECE">Stück</option>
+									</select>
+								</td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+							</tr>
+							<tr>
+								<td><img class="avatar" src="ingredient-avatar.png" /></td>
+								<td><input type="text" /></td>
+								<td><input type="number" min="0" step="1" /></td>
+								<td>
+									<select>
+										<option value="LITRE">Liter</option>
+										<option value="GRAM">Gramm</option>
+										<option value="TEASPOON">Teelöffel</option>
+										<option value="TABLESPOON">Esslöffel</option>
+										<option value="PINCH">Prise</option>
+										<option value="CUP">Tasse</option>
+										<option value="CAN">Dose</option>
+										<option value="TUBE">Tube</option>
+										<option value="BUSHEL">Bündel</option>
+										<option value="PIECE">Stück</option>
+									</select>
+								</td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+							</tr>
+							<tr>
+								<td><img class="avatar" src="ingredient-avatar.png" /></td>
+								<td><input type="text" /></td>
+								<td><input type="number" min="0" step="1" /></td>
+								<td>
+									<select>
+										<option value="LITRE">Liter</option>
+										<option value="GRAM">Gramm</option>
+										<option value="TEASPOON">Teelöffel</option>
+										<option value="TABLESPOON">Esslöffel</option>
+										<option value="PINCH">Prise</option>
+										<option value="CUP">Tasse</option>
+										<option value="CAN">Dose</option>
+										<option value="TUBE">Tube</option>
+										<option value="BUSHEL">Bündel</option>
+										<option value="PIECE">Stück</option>
+									</select>
+								</td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+								<td class="horizontal-center"><input type="checkbox" /></td>
+							</tr>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="recipe-illustrations">
+					<h1>Illustration</h1>
+					<div>
+						<audio controls="true" preload="metadata" src="../media/deftones - around the fur.mp3" />
+					</div>
+					<div>
+						<iframe src="https://extension.usu.edu/fscreate/files/Quick_Kitchen_Tips.pdf"></iframe>
+					</div>
+					<div>
+						<iframe src="https://www.youtube.com/embed/ru8yirIIUNM" title="Onlinekurs: Grundlegende Kochtechniken mit Johann Lafer | 7hauben" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+					</div>
+				</div>
+			</section>
+		</template>
+	</head>
+	<body>
+		<header>
+			<nav>
+				<button type="button">Preferences</button>
+				<button type="button">Recipe</button>
+			</nav>
+		</header>
+		<main class="flex">
+			<article class="left">
+			</article>
+
+			<article class="center">
+			</article>
+
+			<article class="right">
+			</article>
+		</main>
+		<footer>
+			ok.
+		</footer>
+	</body>
+</html>

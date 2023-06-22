@@ -1,4 +1,4 @@
-import Controller from "./controller.js";
+import Controller from "../../util/controller.js";
 
 
 class PreferencesController extends Controller {
@@ -9,51 +9,46 @@ class PreferencesController extends Controller {
 
 
 	async activate () {
+		console.log("preferences controller activating.");
 		const template = document.querySelector("head > template.preferences");
 		const preferencesSection = template.content.firstElementChild.cloneNode(true);
 
-		this.centerArticle.innerHTML = "";
+		while (this.centerArticle.lastElementChild)
+			this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(preferencesSection);
+
 		const avatarImage = preferencesSection.querySelector("img.avatar");
-		const commitButton = preferencesSection.querySelector("button.submit");
+		const submitButton = preferencesSection.querySelector("button.submit");
 		const addPhoneButton = preferencesSection.querySelector("button.add-phone");
-		addPhoneButton.addEventListener("click", event => this.addPhoneInput(""));
+		avatarImage.addEventListener("drop", event => this.submitAvatar(event => this.submitAvatar(event.dataTransfer.files[0])));
+		submitButton.addEventListener("click", event => this.submitData());
+		addPhoneButton.addEventListener("click", event => this.addPhoneInput(null));
 
-		// GET /services/people/3
-		this.messageElement.value = "";
-		try {
-			const response = await fetch("/services/people/3", { method: "GET", headers: { "Accept": "application/json" }});
-			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
-			const person = await response.json();
-			this.messageElement.value = "ok";
-
-			commitButton.addEventListener("click", event => this.commitData(person));
-			avatarImage.addEventListener("drop", event => this.commitAvatar(person, event.dataTransfer.files[0]));
-
-			this.displayPerson (person);
-		} catch (error) {
-			this.messageElement.value = error.message || "a problem occurred!";
-		}
+		this.displaySessionOwner ();
 	}
 
 
-	displayPerson (person) {
+	deactivate () {
+		console.log("preferences controller deactivating.");
+	}
+
+	displaySessionOwner () {
 		const preferencesSection = this.centerArticle.querySelector("section.preferences");
-		preferencesSection.querySelector("img.avatar").src = "/services/people/" + person.identity + "/avatar?cache-bust=" + Date.now();
-		preferencesSection.querySelector("input.identity").value = person.identity;
-		preferencesSection.querySelector("input.email").value = person.email;
-		preferencesSection.querySelector("select.group").value = person.group;
-		preferencesSection.querySelector("input.title").value = person.name.title;
-		preferencesSection.querySelector("input.surname").value = person.name.family;
-		preferencesSection.querySelector("input.forename").value = person.name.given;
-		preferencesSection.querySelector("input.street").value = person.address.street;
-		preferencesSection.querySelector("input.city").value = person.address.city;
-		preferencesSection.querySelector("input.country").value = person.address.country;
-		preferencesSection.querySelector("input.postcode").value = person.address.postcode;
+		preferencesSection.querySelector("img.avatar").src = "/services/people/" + this.sessionOwner.identity + "/avatar?cache-bust=" + Date.now();
+		preferencesSection.querySelector("input.identity").value = this.sessionOwner.identity;
+		preferencesSection.querySelector("input.email").value = this.sessionOwner.email;
+		preferencesSection.querySelector("select.group").value = this.sessionOwner.group;
+		preferencesSection.querySelector("input.title").value = this.sessionOwner.name.title;
+		preferencesSection.querySelector("input.surname").value = this.sessionOwner.name.family;
+		preferencesSection.querySelector("input.forename").value = this.sessionOwner.name.given;
+		preferencesSection.querySelector("input.street").value = this.sessionOwner.address.street;
+		preferencesSection.querySelector("input.city").value = this.sessionOwner.address.city;
+		preferencesSection.querySelector("input.country").value = this.sessionOwner.address.country;
+		preferencesSection.querySelector("input.postcode").value = this.sessionOwner.address.postcode;
 
 		const phonesElement = preferencesSection.querySelector("fieldset > div.phones");
 		phonesElement.innerHTML = "";
-		for (const phone of person.phones)
+		for (const phone of this.sessionOwner.phones)
 			this.addPhoneInput(phone);
 	}
 
@@ -73,9 +68,9 @@ class PreferencesController extends Controller {
 	}
 
 
-	async commitData (person) {
+	async submitData () {
 		const preferencesSection = this.centerArticle.querySelector("section.preferences");
-		const personClone = window.structuredClone(person);
+		const personClone = window.structuredClone(this.sessionOwner);
 
 		const password = preferencesSection.querySelector("input.password").value.trim() || null;
 		personClone.identity = preferencesSection.querySelector("input.identity").value.trim() || null;
@@ -106,17 +101,17 @@ class PreferencesController extends Controller {
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
 			this.messageElement.value = "ok";
 
-			for (const key in person)
-				person[key] = personClone[key];
+			for (const key in this.sessionOwner)
+				this.sessionOwner[key] = personClone[key];
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
 
-		this.displayPerson(person);
+		this.displaySessioOwner();
 	}
 
 
-	async commitAvatar (person, dropFile) {
+	async submitAvatar (dropFile) {
 		const preferencesSection = this.centerArticle.querySelector("section.preferences");
 
 		this.messageElement.value = "";
@@ -124,10 +119,10 @@ class PreferencesController extends Controller {
 			if (!dropFile.type.startsWith("image/")) throw new RangeError("avatar file must be an image!");
 
 			// PUT /services/people/id/avatar
-			const resource = "/services/people/" + person.identity + "/avatar";
+			const resource = "/services/people/" + this.sessionOwner.identity + "/avatar";
 			const response = await fetch(resource, { method: "PUT", headers: { "Content-Type": dropFile.type, "Accept": "text/plain" }, body: dropFile });
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
-			person.avatarReference = Number.parseInt(await response.text());
+			this.sessionOwner.avatarReference = Number.parseInt(await response.text());
 			this.messageElement.value = "ok";
 
 			preferencesSection.querySelector("img.avatar").src = "/services/people/" + person.identity + "/avatar?cache-bust=" + Date.now();
@@ -143,13 +138,14 @@ window.addEventListener("load", event => {
 	const menuButtons = document.querySelectorAll("header > nav > button");
 	const menuButton = Array.from(menuButtons).find(button => button.classList.contains("preferences"));
 
-	menuButton.addEventListener("click", () => {
+	for (const button of menuButtons) {
+		const active = button.classList.contains("preferences");
+		button.addEventListener("click", event => controller.active = active);
+	}
+
+	menuButton.addEventListener("click", event => {
 		for (const button of menuButtons)
 			button.classList.remove("active");
 		menuButton.classList.add("active");
 	});
-
-	menuButton.addEventListener("click", () => controller.activate());
-
-	menuButton.click();
 });
