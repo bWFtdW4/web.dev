@@ -97,50 +97,18 @@ class RecipeEditorController extends Controller {
 		const parameterization = new URLSearchParams();
 		let value;
 		
-		//add select SessionOwner recipe
-		console.log("//add select SessionOwner recipe")
-
-		/*
-		value = recipeEditorSection.querySelector("input.title").value || null;
-		if (value) parameterization.set("title", value);
-
-		value = recipeEditorSection.querySelector("input.description-fragment").value || null;
-		if (value) parameterization.set("description-fragment", value);
 		
-		value = recipeEditorSection.querySelector("input.instruction-fragment").value || null;
-		if (value) parameterization.set("instruction-fragment", value);
-
-		value = recipeEditorSection.querySelector("input.owner-email").value || null;
-		if (value) parameterization.set("owner-email", value);
-
-		value = recipeEditorSection.querySelector("select.category").value || null;
-		if (value) parameterization.set("category", value);
-
-		value = recipeEditorSection.querySelector("select.restriction").value || null;
-		switch (value) {
-			default:
-				break;
-			case "PESCATARIAN":
-				parameterization.set("pescetarian", "true");
-				break;
-			case "LACTO-OVO-VEGETARIAN":
-				parameterization.set("lacto-ovo-vegetarian", "true");
-				break;
-			case "LACTO-VEGETARIAN":
-				parameterization.set("lacto-vegetarian", "true");
-				break;
-			case "VEGAN":
-				parameterization.set("vegan", "true");
-				break;
-		}
-
+		//add select SessionOwner.email recipe
+		console.log("//add select SessionOwner.email recipe" + this.sessionOwner.email);
+		
 
 		let recipes = [];
 		this.messageElement.value = "";
 		try {
-			// GET /services/recipes
+			// GET /services/recipes?owner-email=mamun@gmail.com
 			//const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
-			const resource = "/services/recipes/";
+			
+			const resource = "/services/recipes?owner-email=mamun@gmail.com";
 			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
 			recipes = await response.json();
@@ -148,10 +116,9 @@ class RecipeEditorController extends Controller {
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
-
+		
 		this.displayRecipes(recipes);
-
-		*/
+		
 	}
 
 
