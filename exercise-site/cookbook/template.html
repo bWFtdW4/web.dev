@@ -8,9 +8,7 @@
 		<title>Kochbuch App</title>
 		<link rel="icon" type="image/png" href="cookbook.png" />
 		<link rel="stylesheet" href="main.css" />
-		<script type="module" src="authentication-controller.js"></script>
-		<script type="module" src="preferences-controller.js"></script>
-		<script type="module" src="recipe-query-controller.js"></script>
+		
 
 		<template class="authentication">
 			<section class="authentication">
@@ -317,6 +315,33 @@
 			</article>
 
 			<article class="center">
+
+
+					<tr class="recipe-ingredient-row">
+						<td><img class="avatar" src="." /></td>
+						<td><input class="alias" type="text" readonly="true"/></td>
+						<td><input class="amount" type="number" min="0" step="1" readonly="true"/></td>
+						<td>
+							<select class="unit" disabled="true">
+								<option value="LITRE">Liter</option>
+								<option value="GRAM">Gramm</option>
+								<option value="TEASPOON">Teelöffel</option>
+								<option value="TABLESPOON">Esslöffel</option>
+								<option value="PINCH">Prise</option>
+								<option value="CUP">Tasse</option>
+								<option value="CAN">Dose</option>
+								<option value="TUBE">Tube</option>
+								<option value="BUSHEL">Bündel</option>
+								<option value="PIECE">Stück</option>
+							</select>
+						</td>
+						<td class="horizontal-center"><input class="pescatarian" type="checkbox" disabled="true" /></td>
+						<td class="horizontal-center"><input class="lacto-ovo-vegetarian" type="checkbox" disabled="true" /></td>
+						<td class="horizontal-center"><input class="lacto-vegetarian" type="checkbox" disabled="true" /></td>
+						<td class="horizontal-center"><input class="vegan" type="checkbox" disabled="true" /></td>
+					</tr>
+
+
 			</article>
 
 			<article class="right">

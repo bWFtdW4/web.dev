@@ -1,52 +1,61 @@
 import Controller from "../../util/controller.js";
 
 
-class RecipeController extends Controller {
+class RecipeEditorController extends Controller {
+	
 	constructor () {
 		super();
 	}
 
 
 	async activate () {
-		console.log("recipe-query controller activating.");
-		const template = document.querySelector("head > template.recipe-query");
-		const recipeQuerySection = template.content.firstElementChild.cloneNode(true);
+		console.log("recipe-editor controller activating.");
+		const template = document.querySelector("head > template.recipe-editor");
+		const recipeEditorSection = template.content.firstElementChild.cloneNode(true);
 
 		while (this.centerArticle.lastElementChild)
 			this.centerArticle.lastElementChild.remove();
-		this.centerArticle.append(recipeQuerySection);
+		this.centerArticle.append(recipeEditorSection);
 
-		const searchButton = recipeQuerySection.querySelector("button.search");
-		searchButton.addEventListener("click", event => this.queryRecipes());
+		//this.editAllRecipes();
+		const showAllButton = recipeEditorSection.querySelector("button.editAllRecipes");
+		showAllButton.addEventListener("click", event => this.editAllRecipes());
+
+		const showMyButton = recipeEditorSection.querySelector("button.editMyRecipes");
+		showMyButton.addEventListener("click", event => this.editMyRecipes());
+
 	}
 
 
 	deactivate () {
-		console.log("recipe-query controller deactivating.");
+		console.log("recipe-editor controller deactivating.");
 	}
 
 
-	async queryRecipes () {
-		const recipeQuerySection = this.centerArticle.querySelector("section.recipe-query");
+	async editAllRecipes () {
+		const recipeEditorSection = this.centerArticle.querySelector("section.recipe-editor");
 		const parameterization = new URLSearchParams();
 		let value;
 		
-		value = recipeQuerySection.querySelector("input.title").value || null;
+		console.log("editAllRecipes")
+
+		/*
+		value = recipeEditorSection.querySelector("input.title").value || null;
 		if (value) parameterization.set("title", value);
 
-		value = recipeQuerySection.querySelector("input.description-fragment").value || null;
+		value = recipeEditorSection.querySelector("input.description-fragment").value || null;
 		if (value) parameterization.set("description-fragment", value);
 		
-		value = recipeQuerySection.querySelector("input.instruction-fragment").value || null;
+		value = recipeEditorSection.querySelector("input.instruction-fragment").value || null;
 		if (value) parameterization.set("instruction-fragment", value);
 
-		value = recipeQuerySection.querySelector("input.owner-email").value || null;
+		value = recipeEditorSection.querySelector("input.owner-email").value || null;
 		if (value) parameterization.set("owner-email", value);
 
-		value = recipeQuerySection.querySelector("select.category").value || null;
+		value = recipeEditorSection.querySelector("select.category").value || null;
 		if (value) parameterization.set("category", value);
 
-		value = recipeQuerySection.querySelector("select.restriction").value || null;
+		value = recipeEditorSection.querySelector("select.restriction").value || null;
 		switch (value) {
 			default:
 				break;
@@ -64,11 +73,14 @@ class RecipeController extends Controller {
 				break;
 		}
 
+		*/
+
 		let recipes = [];
 		this.messageElement.value = "";
 		try {
 			// GET /services/recipes
-			const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
+			//const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
+			const resource = "/services/recipes/";
 			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
 			recipes = await response.json();
@@ -80,17 +92,79 @@ class RecipeController extends Controller {
 		this.displayRecipes(recipes);
 	}
 
+	async editMyRecipes () {
+		const recipeEditorSection = this.centerArticle.querySelector("section.recipe-editor");
+		const parameterization = new URLSearchParams();
+		let value;
+		
+		//add select SessionOwner recipe
+		console.log("//add select SessionOwner recipe")
+
+		/*
+		value = recipeEditorSection.querySelector("input.title").value || null;
+		if (value) parameterization.set("title", value);
+
+		value = recipeEditorSection.querySelector("input.description-fragment").value || null;
+		if (value) parameterization.set("description-fragment", value);
+		
+		value = recipeEditorSection.querySelector("input.instruction-fragment").value || null;
+		if (value) parameterization.set("instruction-fragment", value);
+
+		value = recipeEditorSection.querySelector("input.owner-email").value || null;
+		if (value) parameterization.set("owner-email", value);
+
+		value = recipeEditorSection.querySelector("select.category").value || null;
+		if (value) parameterization.set("category", value);
+
+		value = recipeEditorSection.querySelector("select.restriction").value || null;
+		switch (value) {
+			default:
+				break;
+			case "PESCATARIAN":
+				parameterization.set("pescetarian", "true");
+				break;
+			case "LACTO-OVO-VEGETARIAN":
+				parameterization.set("lacto-ovo-vegetarian", "true");
+				break;
+			case "LACTO-VEGETARIAN":
+				parameterization.set("lacto-vegetarian", "true");
+				break;
+			case "VEGAN":
+				parameterization.set("vegan", "true");
+				break;
+		}
+
+
+		let recipes = [];
+		this.messageElement.value = "";
+		try {
+			// GET /services/recipes
+			//const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
+			const resource = "/services/recipes/";
+			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
+			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
+			recipes = await response.json();
+			this.messageElement.value = "ok";
+		} catch (error) {
+			this.messageElement.value = error.message || "a problem occurred!";
+		}
+
+		this.displayRecipes(recipes);
+
+		*/
+	}
+
 
 	displayRecipes (recipes) {
-		const template = document.querySelector("head > template.recipe-query-result");
+		const template = document.querySelector("head > template.recipe-editor-query-result");
 		const recipeQueryResultSection = template.content.firstElementChild.cloneNode(true);
 		
-		while (!this.centerArticle.lastElementChild.classList.contains("recipe-query"))
+		while (!this.centerArticle.lastElementChild.classList.contains("recipe-editor"))
 			this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(recipeQueryResultSection);
 
 		const recipeTableBody = recipeQueryResultSection.querySelector("table > tbody");
-		const rowTemplate = document.querySelector("head > template.recipe-query-result-row");
+		const rowTemplate = document.querySelector("head > template.recipe-editor-query-result-row");
 		for (const recipe of recipes) {
 			const recipeRow = rowTemplate.content.firstElementChild.cloneNode(true);
 			recipeTableBody.append(recipeRow);
@@ -109,7 +183,7 @@ class RecipeController extends Controller {
 
 
 	displayRecipe (recipe) {
-		const template = document.querySelector("head > template.recipe-view");
+		const template = document.querySelector("head > template.recipe-editor-view");
 		const recipeViewSection = template.content.firstElementChild.cloneNode(true);
 
 		// while (!this.centerArticle.lastElementChild.classList.contains("recipe-view"))
@@ -125,10 +199,10 @@ class RecipeController extends Controller {
 		recipeViewSection.querySelector("input.lacto-ovo-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoOvoVegetarian, true);
 		recipeViewSection.querySelector("input.lacto-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoVegetarian, true);
 
-		const ingredientsElement = recipeViewSection.querySelector("div.recipe-ingredients tbody");
+		const ingredientsElement = recipeViewSection.querySelector("div.recipe-editor-ingredients tbody");
 		ingredientsElement.innerHTML = "";
 
-		const ingredientTemplate = document.querySelector("head > template.recipe-ingredient-row");
+		const ingredientTemplate = document.querySelector("head > template.recipe-editor-ingredient-row");
 		for (const ingredient of recipe.ingredients) {
 			const ingredientElement = ingredientTemplate.content.firstElementChild.cloneNode(true);
 			ingredientsElement.append(ingredientElement);
@@ -147,12 +221,12 @@ class RecipeController extends Controller {
 
 
 window.addEventListener("load", event => {
-	const controller = new RecipeController();
+	const controller = new RecipeEditorController();
 	const menuButtons = document.querySelectorAll("header > nav > button");
-	const menuButton = Array.from(menuButtons).find(button => button.classList.contains("recipe-query"));
+	const menuButton = Array.from(menuButtons).find(button => button.classList.contains("recipe-editor"));
 
 	for (const button of menuButtons) {
-		const active = button.classList.contains("recipe-query");
+		const active = button.classList.contains("recipe-editor");
 		button.addEventListener("click", event => controller.active = active);
 	}
 

@@ -94,7 +94,7 @@ header > nav > button.active {
 
 
 /*
- * Preferences rules.
+ * authentication rules.
  */
 section.authentication label {
 	width: 5em;
@@ -166,6 +166,85 @@ section.recipe-query input.default {
 
 
 section.recipe-query-result > table img.avatar {
+	width: 3em;
+}
+
+ 
+
+section.recipe-view > div.recipe-view img.avatar {
+	width: 6.8em;
+}
+
+
+section.recipe-view > div.recipe-view div.left {
+	width: 20em;
+}
+
+
+section.recipe-view > div.recipe-view div.right {
+	width: 14em;
+}
+
+
+section.recipe-view > div.recipe-view label.default {
+	width: 6.5em;
+}
+
+
+section.recipe-view > div.recipe-view input.default {
+	width: 14em;
+}
+
+
+section.recipe-view > div.recipe-ingredients {
+	margin-top: 2em;
+}
+
+
+section.recipe-view > div.recipe-ingredients img.avatar {
+	width: 3em;
+}
+
+section.recipe-view > div.recipe-ingredients input[type='number'] {
+	width: 4em;
+}
+
+section.recipe-view > div.recipe-ingredients table {
+	background: ghostwhite;
+}
+
+
+section.recipe-view > div.recipe-ingredients table, div.recipe-ingredients tr {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+
+section.recipe-view > div.recipe-illustrations {
+	margin-top: 2em;
+}
+
+
+section.recipe-view > div.recipe-illustrations iframe, div.recipe-illustrations video {
+	height: 320px;
+	width: 480px;
+}
+
+/*
+ * recipe-editor section rules
+ */
+ section.recipe-editor label {
+	width: 8em;
+	text-align: right;
+}
+
+
+section.recipe-editor input.default {
+	width: 14em;
+}
+
+
+section.recipe-editor-query-result > table img.avatar {
 	width: 3em;
 }
 

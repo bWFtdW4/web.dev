@@ -11,6 +11,7 @@
 		<script type="module" src="authentication-controller.js"></script>
 		<script type="module" src="preferences-controller.js"></script>
 		<script type="module" src="recipe-query-controller.js"></script>
+		<script type="module" src="recipe-editor-controller.js"></script>
 
 		<template class="authentication">
 			<section class="authentication">
@@ -301,6 +302,220 @@
 				<td class="horizontal-center"><input class="vegan" type="checkbox" disabled="true" /></td>
 			</tr>
 		</template>
+
+		<template class="recipe-editor">
+			<section class="recipe-editor">
+				<div>wip from here</div>
+				<div>
+					<button class="editAllRecipes">Alle Rezepte anzeigen</button>
+					<button class="editMyRecipes">Meine Rezepte anzeigen</button>
+				</div>
+			</section>
+			
+		</template>
+
+		<template class="recipe-editor-query">
+			<section class="recipe-editor-query">
+				<div>
+					<label class="default">Titel</label>
+					<input class="title default" type="text" />
+				</div>
+				<div>
+					<label class="default">Beschreibung</label>
+					<input class="description-fragment default" type="text" />
+				</div>
+				<div>
+					<label class="default">Anleitung</label>
+					<input class="instruction-fragment default" type="text" />
+				</div>
+				<div>
+					<label class="default">Email des Autors</label>
+					<input class="owner-email default" type="text" />
+				</div>
+				<div>
+					<label class="default">Restriktion</label>
+					<select class="restriction">
+						<option value=""></option>
+						<option value="PESCATARIAN">Pescatarisch</option>
+						<option value="LACTO-OVO-VEGETARIAN">Lacto-Ovo-Vegetarisch</option>
+						<option value="LACTO-VEGETARIAN">Lacto-Vegetarisch</option>
+						<option value="VEGAN">Vegan</option>
+					</select>
+				</div>
+				<div>
+					<label class="default">Kategorie</label>
+					<select class="category">
+						<option value=""></option>
+						<option value="MAIN_COURSE">Hauptgericht</option>
+						<option value="APPETIZER">Vorspeise</option>
+						<option value="SNACK">Snack</option>
+						<option value="DESSERT">Dessert</option>
+						<option value="BREAKFAST">Frühstück</option>
+						<option value="BUFFET">Büfett</option>
+						<option value="BARBEQUE">Gegrilltes</option>
+						<option value="ADOLESCENT">Kinderportion</option>
+						<option value="INFANT">Babynahrung</option>
+					</select>
+				</div>
+				<button class="search" type="button">suchen</button>
+			</section>
+		</template>
+
+		<template class="recipe-editor-query-result">
+			<section class="recipe-editor-query-result">
+				<table>
+					<thead>
+						<tr>
+							<th>Avatar</th>
+							<th>Titel</th>
+							<th>Kategorie</th>
+							<th>Pescatarisch</th>
+							<th>Ovolacto-Vegetarisch</th>
+							<th>Lacto-Vegetarisch</th>
+							<th>Vegan</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</section>	
+		</template>
+
+		<template class="recipe-editor-query-result-row">
+			<tr class="recipe-editor-query-result-row">
+				<td><img class="avatar" src="." /></td>
+				<td><input class="title" type="text" readonly="true" /></td>
+				<td>
+					<select class="category" disabled="true">
+						<option value="MAIN_COURSE">Hauptgericht</option>
+						<option value="APPETIZER">Vorspeise</option>
+						<option value="SNACK">Snack</option>
+						<option value="DESSERT">Dessert</option>
+						<option value="BREAKFAST">Frühstück</option>
+						<option value="BUFFET">Büfett</option>
+						<option value="BARBEQUE">Gegrilltes</option>
+						<option value="ADOLESCENT">Kinderportion</option>
+						<option value="INFANT">Babynahrung</option>
+					</select>
+				</td>
+				<td class="horizontal-center"><input class="pescatarian" type="checkbox" disabled="true" /></td>
+				<td class="horizontal-center"><input class="lacto-ovo-vegetarian" type="checkbox" disabled="true" /></td>
+				<td class="horizontal-center"><input class="lacto-vegetarian" type="checkbox" disabled="true" /></td>
+				<td class="horizontal-center"><input class="vegan" type="checkbox" disabled="true" /></td>
+			</tr>
+		</template>
+		
+		<template class="recipe-editor-view">
+			<section class="recipe-editor-view">
+				<div class="recipe-editor-view">
+					<div>
+						<label class="default">Avatar</label>
+						<img class="avatar vertical-center" src="." />
+					</div>
+					<div class="flex">
+						<div class="left">
+							<div>
+								<label class="default">Titel</label>
+								<input class="title default" type="text" />
+							</div>
+							<div>
+								<label class="default">Kategorie</label>
+								<select class="category">
+									<option value="MAIN_COURSE">Hauptgericht</option>
+									<option value="APPETIZER">Vorspeise</option>
+									<option value="SNACK">Snack</option>
+									<option value="DESSERT">Dessert</option>
+									<option value="BREAKFAST">Frühstück</option>
+									<option value="BUFFET">Büfett</option>
+									<option value="BARBEQUE">Gegrilltes</option>
+									<option value="ADOLESCENT">Kinderportion</option>
+									<option value="INFANT">Babynahrung</option>
+								</select>
+							</div>
+							<div>
+								<label class="default">Eigner</label>
+								<input class="owner-email default" type="email" value="sascha.baumeister@gmail.com" readonly="true" />
+							</div>
+							<div>
+								<label class="default vertical-center">Pescatarisch</label>
+								<input class="pescatarian" type="checkbox" disabled="true" />
+							</div>
+							<div>
+								<label class="default vertical-center">Ovolacto-Vegetarisch</label>
+								<input class="lacto-ovo-vegetarian" type="checkbox" disabled="true" />
+							</div>
+							<div>
+								<label class="default vertical-center">Lacto-Vegetarisch</label>
+								<input class="lacto-vegetarian" type="checkbox" disabled="true" />
+							</div>
+							<div>
+								<label class="default vertical-center">Vegan</label>
+								<input class="vegan" type="checkbox" disabled="true" />
+							</div>
+						</div>
+						<div class="right">
+							<div>
+								<label class="block">Beschreibung</label>
+								<textarea class="description default" type="text"></textarea>
+							</div>
+							<div>
+								<label class="block">Anleitung</label>
+								<textarea class="instruction default" type="text"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="recipe-editor-ingredients">
+					<table>
+						<thead>
+							<tr>
+								<th>Avatar</th>
+								<th>Alias</th>
+								<th>Menge</th>
+								<th>Einheit</th>
+								<th>Pescatarisch</th>
+								<th>Ovolacto-Vegetarisch</th>
+								<th>Lacto-Vegetarisch</th>
+								<th>Vegan</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="recipe-editor-illustrations">
+				</div>
+			</section>
+		</template>
+
+		<template class="recipe-editor-ingredient-row">
+			<tr class="recipe-editor-ingredient-row">
+				<td><img class="avatar" src="." /></td>
+				<td><input class="alias" type="text" readonly="true"/></td>
+				<td><input class="amount" type="number" min="0" step="1" readonly="true"/></td>
+				<td>
+					<select class="unit" disabled="true">
+						<option value="LITRE">Liter</option>
+						<option value="GRAM">Gramm</option>
+						<option value="TEASPOON">Teelöffel</option>
+						<option value="TABLESPOON">Esslöffel</option>
+						<option value="PINCH">Prise</option>
+						<option value="CUP">Tasse</option>
+						<option value="CAN">Dose</option>
+						<option value="TUBE">Tube</option>
+						<option value="BUSHEL">Bündel</option>
+						<option value="PIECE">Stück</option>
+					</select>
+				</td>
+				<td class="horizontal-center"><input class="pescatarian" type="checkbox" disabled="true" /></td>
+				<td class="horizontal-center"><input class="lacto-ovo-vegetarian" type="checkbox" disabled="true" /></td>
+				<td class="horizontal-center"><input class="lacto-vegetarian" type="checkbox" disabled="true" /></td>
+				<td class="horizontal-center"><input class="vegan" type="checkbox" disabled="true" /></td>
+			</tr>
+		</template>
+
 	</head>
 	<body>
 		<header>
