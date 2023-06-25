@@ -217,7 +217,8 @@ class RecipeEditorController extends Controller {
 //!		//the select "ingredient-list" fill with ingredientList
 		const ingredientListSelect = addNewRecipeSection.querySelector("select.ingredient-list");
 		ingredientListSelect.innerHTML = "";
-		const ingredientListTemplate = document.querySelector("head > template.addNewRecipe > fieldset.addNewRecipe > selcet.ingredient-list");
+		//const ingredientListTemplate = document.querySelector("head > template.addNewRecipe > fieldset.addNewRecipe > selcet.ingredient-list");
+		document.querySelector('.ingredient-list');
 		for (const ingredient of ingredientList) {
 			const ingredientListElement = ingredientListTemplate.content.firstElementChild.cloneNode(true);
 			ingredientListSelect.append(ingredientListElement);
