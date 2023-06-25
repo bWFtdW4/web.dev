@@ -112,8 +112,15 @@ class RecipeController extends Controller {
 		const template = document.querySelector("head > template.recipe-view");
 		const recipeViewSection = template.content.firstElementChild.cloneNode(true);
 
-		// while (!this.centerArticle.lastElementChild.classList.contains("recipe-view"))
-		//	this.centerArticle.lastElementChild.remove();
+
+		//BUG !
+
+		//the search query is overwritten with recipe data
+		//either add new section to display recipe data
+		//or add back button with query result
+
+		//while (!this.centerArticle.lastElementChild.classList.contains("recipe-view"))
+			this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(recipeViewSection);
 
 		recipeViewSection.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar?cache-bust=" + Date.now();
@@ -124,6 +131,30 @@ class RecipeController extends Controller {
 		recipeViewSection.querySelector("input.pescatarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.pescatarian, true);
 		recipeViewSection.querySelector("input.lacto-ovo-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoOvoVegetarian, true);
 		recipeViewSection.querySelector("input.lacto-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoVegetarian, true);
+		
+		/*
+		>>TODO
+		>>get owner object > extract email > assign to > recipeViewSection.querySelector("input.owner-email").value = object.email;
+
+		//recipeViewSection.querySelector("input.owner-email").value = "this should be email of user: " + recipe.ownerReference;	
+		recipeViewSection.querySelector("input.owner-email").value = this.sessionOwner.email;
+
+		ownerReference(3)  >>> query GET/services/person/ + ownerReference
+
+		let recipes = [];
+		this.messageElement.value = "";
+		try {
+			// GET /services/recipes
+			const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
+			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
+			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
+			recipes = await response.json();
+			this.messageElement.value = "ok";
+		} catch (error) {
+			this.messageElement.value = error.message || "a problem occurred!";
+		}
+
+		*/
 
 		const ingredientsElement = recipeViewSection.querySelector("div.recipe-ingredients tbody");
 		ingredientsElement.innerHTML = "";

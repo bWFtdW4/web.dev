@@ -230,6 +230,7 @@ section.recipe-view > div.recipe-illustrations iframe, div.recipe-illustrations 
 	width: 480px;
 }
 
+
 /*
  * recipe-editor section rules
  */
@@ -250,61 +251,85 @@ section.recipe-editor-query-result > table img.avatar {
 
  
 
-section.recipe-view > div.recipe-view img.avatar {
+section.recipe-editor-view > div.recipe-editor-view img.avatar {
 	width: 6.8em;
 }
 
 
-section.recipe-view > div.recipe-view div.left {
+section.recipe-editor-view > div.recipe-editor-view div.left {
 	width: 20em;
 }
 
 
-section.recipe-view > div.recipe-view div.right {
+section.recipe-editor-view > div.recipe-editor-view div.right {
 	width: 14em;
 }
 
 
-section.recipe-view > div.recipe-view label.default {
+section.recipe-editor-view > div.recipe-editor-view label.default {
 	width: 6.5em;
 }
 
 
-section.recipe-view > div.recipe-view input.default {
+section.recipe-editor-view > div.recipe-editor-view input.default {
 	width: 14em;
 }
 
 
-section.recipe-view > div.recipe-ingredients {
+section.recipe-editor-view > div.recipe-editor-ingredients {
 	margin-top: 2em;
 }
 
 
-section.recipe-view > div.recipe-ingredients img.avatar {
+section.recipe-editor-view > div.recipe-editor-ingredients img.avatar {
 	width: 3em;
 }
 
-section.recipe-view > div.recipe-ingredients input[type='number'] {
+section.recipe-editor-view > div.recipe-editor-ingredients input[type='number'] {
 	width: 4em;
 }
 
-section.recipe-view > div.recipe-ingredients table {
+section.recipe-editor-view > div.recipe-editor-ingredients table {
 	background: ghostwhite;
 }
 
 
-section.recipe-view > div.recipe-ingredients table, div.recipe-ingredients tr {
+section.recipe-editor-view > div.recipe-editor-ingredients table, div.recipe-editor-ingredients tr {
 	border: 1px solid black;
 	border-collapse: collapse;
 }
 
 
-section.recipe-view > div.recipe-illustrations {
+section.recipe-editor-view > div.recipe-illustrations {
 	margin-top: 2em;
 }
 
 
-section.recipe-view > div.recipe-illustrations iframe, div.recipe-illustrations video {
+section.recipe-editor-view > div.recipe-illustrations iframe, div.recipe-illustrations video {
 	height: 320px;
 	width: 480px;
+}
+
+/*
+ingredient-type
+*/
+html > body > main > article.center > div.ingredient-type-editor-result > table > tbody > tr > td > img.avatar{
+	width: 4em;
+}
+
+
+/*
+addNewRecipe
+*/
+fieldset.addNewRecipe > div > label{
+	padding: 0.5em;
+	width: 8em;
+	text-align: right;
+}
+
+fieldset.addNewRecipe > div > textarea{
+	width: 20em;
+	height: 10em;
+	padding: 0.5em;
+	
 }
