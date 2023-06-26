@@ -24,8 +24,8 @@ class RecipeEditorController extends Controller {
 		showMyButton.addEventListener("click", event => this.showMyRecipes());
 		
 		const addNewRecipe = recipeEditorSection.querySelector("button.addNewRecipe");
-		addNewRecipe.addEventListener("click", event => this.addNewRecipe());
-		
+		//addNewRecipe.addEventListener("click", event => this.addNewRecipe());
+		addNewRecipe.addEventListener("click", event => this.getAllIngredient());
 		
 		
 	}
@@ -197,7 +197,30 @@ class RecipeEditorController extends Controller {
 
 	}
 
-	async addNewRecipe() {
+	async getAllIngredient () {
+		console.log("getAllIngredient")
+
+		const ingredientTypeEditorSection = this.centerArticle.querySelector("section.ingredient-type-editor");
+
+		let ingredientTypes = [];
+		this.messageElement.value = "";
+		try {
+			// GET services/ingredient-types
+			const resource = "/services/ingredient-types/";
+			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
+			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
+			ingredientTypes = await response.json();
+			this.messageElement.value = "ok";
+		} catch (error) {
+			this.messageElement.value = error.message || "a problem occurred!";
+		}
+
+		console.log("what is in the box :" + ingredientTypes);
+		this.addNewRecipe(ingredientTypes);
+	}
+
+
+	async addNewRecipe(ingredientTypes) {
 		console.log("addNewRecipe");
 		
 		
@@ -212,20 +235,53 @@ class RecipeEditorController extends Controller {
 		this.centerArticle.append(addNewRecipeSection);
 
 
+
+		//adding all ingredientTypes to select
+		const rowTemplate = document.querySelector("head > template.addNewRecipe > fieldset.addNewRecipe > section > fieldset > table.addNewRecipelngredientRow");
+		
+		for (const ingredientType of ingredientTypes) {
+			const ingredientTypesRow = rowTemplate.content.firstElementChild.cloneNode(true);
+			ingredientTypeTableBody.append(ingredientTypesRow);
+			
+			ingredientTypesRow.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
+			ingredientTypesRow.querySelector("input.alias").value = ingredientType.alias;
+			ingredientTypesRow.querySelector("input.description").value = ingredientType.description;
+			ingredientTypesRow.querySelector("input.pescatarian").checked = ingredientType.pescatarian;
+			ingredientTypesRow.querySelector("input.lacto-ovo-vegetarian").checked = ingredientType.lactoOvoVegetarian;
+			ingredientTypesRow.querySelector("input.lacto-vegetarian").checked = ingredientType.lactoVegetarian;
+			ingredientTypesRow.querySelector("input.vegan").checked = ingredientType.vegan;
+			
+			ingredientTypesRow.querySelector("input.pescatarian").disabled="true";
+			ingredientTypesRow.querySelector("input.lacto-ovo-vegetarian").disabled="true";
+			ingredientTypesRow.querySelector("input.lacto-vegetarian").disabled="true";
+			ingredientTypesRow.querySelector("input.vegan").disabled="true";
+			
+			//click avatar to show ingredientType
+			ingredientTypesRow.querySelector("img.avatar").addEventListener("click", event => this.editIngredientType(ingredientType), );
+		}
+
+
+/*	try to add a dynamic select option list
+
 		let ingredientList = ["tomato", "salt", "pepper"];
+		console.log("ingredientList: " + ingredientList);
 
 //!		//the select "ingredient-list" fill with ingredientList
 		const ingredientListSelect = addNewRecipeSection.querySelector("select.ingredient-list");
 		ingredientListSelect.innerHTML = "";
-		//const ingredientListTemplate = document.querySelector("head > template.addNewRecipe > fieldset.addNewRecipe > selcet.ingredient-list");
-		document.querySelector('.ingredient-list');
+		
+		const ingredientListaddOption = document.querySelector("html > body > main > article.center > fieldset.addNewRecipe > div > select.ingredient-list");
 		for (const ingredient of ingredientList) {
-			const ingredientListElement = ingredientListTemplate.content.firstElementChild.cloneNode(true);
-			ingredientListSelect.append(ingredientListElement);
+			console.log("ingredient: " + ingredient);
+			ingredientListaddOption.append(ingredient);
+			
+			const ingredientListElement = ingredientListaddOption.content.firstElementChild.cloneNode(true);
+			ingredientListElement.append(ingredientListElement);
 			ingredientListElement.value = ingredient.identity;
 			ingredientListElement.textContent = ingredient.title;
-		}
-
+			
+		}		
+*/
 
 		
 
