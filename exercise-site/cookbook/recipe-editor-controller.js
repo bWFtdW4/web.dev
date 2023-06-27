@@ -27,7 +27,17 @@ class RecipeEditorController extends Controller {
 		//addNewRecipe.addEventListener("click", event => this.addNewRecipe());
 		addNewRecipe.addEventListener("click", event => this.getAllIngredient());
 		
-		
+
+		//drop new avatar > moved to displayRecipe (recipe)
+		//html > body > main > artitle.center > section.recipe-editor-view > div.recipe-editor-view > div > img.avatar.vertical-center
+		/*
+		const templateView = document.querySelector("head > template.recipe-editor-view");
+		const recipeEditorViewSection = templateView.content.firstElementChild.cloneNode(true);
+		const recipeEditorView = recipeEditorViewSection.querySelector("div.recipe-editor-view");
+		*/
+
+
+
 	}
 
 
@@ -155,8 +165,13 @@ class RecipeEditorController extends Controller {
 
 		// when press "submitRecipeUpdate"  > post > recipeClone;
 		const under_submitRecipeUpdateButton = document.querySelector("section.recipe-editor > div > button.submitRecipeUpdate");
-		under_submitRecipeUpdateButton.addEventListener("click", event => this.updateRecipeData(recipe));
-		
+		under_submitRecipeUpdateButton.addEventListener("click", event => this.updateRecipeData(recipe));		
+
+		//event drop new ingredient avatar + recipe
+		const changeAvatar = document.querySelector("article.center > section.recipe-editor-view > div.recipe-editor-view > div > img.avatar");
+		changeAvatar.addEventListener("drop", event => console.log("droped avatar"));
+		changeAvatar.addEventListener("drop", event => this.submitAvatar(event.dataTransfer.files[0], recipe));
+
 		
 	}
 	
@@ -341,9 +356,34 @@ class RecipeEditorController extends Controller {
 
 	}
 
+	async submitAvatar(dropFile,recipe){
+		console.log("submitAvatar: " + dropFile);
+		console.log("submitAvatar got recipe.identity: " + recipe.identity);
 
+		//html > body > main > artitle.center > section.recipe-editor-view > div.recipe-editor-view > div > img.avatar.vertical-center
+		const templateView = document.querySelector("head > template.recipe-editor-view");
+		const recipeEditorViewSection = templateView.content.firstElementChild.cloneNode(true);
+		const recipeEditorView = recipeEditorViewSection.querySelector("div.recipe-editor-view");
 
+		this.messageElement.value = "";
+		try {
+			console.log("submit dropFile.type: " + dropFile.type);
+			if (!dropFile.type || !dropFile.type.startsWith("image/")) throw new RangeError("avatar file must be an image!");
 
+			// PUT /services/recipes/{identity}/avatar
+			const resource = "/services/recipes/" + recipe.identity + "/avatar";
+			const response = await fetch(resource, {method: "PUT", headers: {"Content-Type": dropFile.type, "Accept": "text/plain"}, body: dropFile});
+			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
+			recipe.avatarReference = await response.text();
+			this.messageElement.value = "avatar updated";
+
+			// update avatar
+			const changeAvatar = document.querySelector("article.center > section.recipe-editor-view > div.recipe-editor-view > div > img.avatar");
+			changeAvatar.src = "/services/recipes/" + this.recipe.identity + "/avatar?cache-bust=" + Date.now();
+		} catch (error) {
+			this.messageElement.value = error || "a problem occurred while updating the avatar";
+		}
+	}
 
 }
 

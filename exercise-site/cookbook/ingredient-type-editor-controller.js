@@ -21,7 +21,7 @@ class IngredientTypeEditorController extends Controller {
 		showAllIngredientButton.addEventListener("click", event => this.getAllIngredient());
 		
 		const addNewIngredientButton = ingredientTypeEditorSection.querySelector("button.addNewIngredient");
-		addNewIngredientButton.addEventListener("click", event => this.addNewIngredient());
+		addNewIngredientButton.addEventListener("click", event => this.addNewIngredientType());
 		
 		/*
 		*where tf is the avatar...
@@ -102,45 +102,55 @@ class IngredientTypeEditorController extends Controller {
 		}
 	}
 
-	editIngredientType(ingredientType) {
+	async editIngredientType(ingredientType) {
 		console.log("editIngredientType");
-		console.log("what is in the box :" + ingredientType + " name: " + ingredientType.alias);
+		//console.log("what is in the inbox :" + ingredientType + " name: " + ingredientType.alias);
 
-		const template = document.querySelector("head > template.ingredient-type-editor-result");
-		const ingredientTypeQueryResultSection = template.content.firstElementChild.cloneNode(true);
-		
+		//display ingredientType in ingredient-type-editor-result-row
+		const templateRow = document.querySelector("head > template.ingredient-type-editor-result-row");
+		const ingredientTypeRow = templateRow.content.firstElementChild.cloneNode(true);
+		const ingredientTypeTableBody = document.querySelector("div.ingredient-type-editor-result tbody");
+		ingredientTypeTableBody.append(ingredientTypeRow);
+
 		while (!this.centerArticle.lastElementChild.classList.contains("ingredient-type-editor"))
 		this.centerArticle.lastElementChild.remove();
-		this.centerArticle.append(ingredientTypeQueryResultSection);
-		
-		const ingredientTypeTableBody = ingredientTypeQueryResultSection.querySelector("table > tbody");
-		const rowTemplate = document.querySelector("head > template.ingredient-type-editor-result-row");
-		
-		const ingredientTypesRow = rowTemplate.content.firstElementChild.cloneNode(true);
-		ingredientTypeTableBody.append(ingredientTypesRow);
-		
-		ingredientTypesRow.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
-		ingredientTypesRow.querySelector("input.alias").value = ingredientType.alias;
-		ingredientTypesRow.querySelector("input.description").value = ingredientType.description;
-		ingredientTypesRow.querySelector("input.pescatarian").checked = ingredientType.pescatarian;
-		ingredientTypesRow.querySelector("input.lacto-ovo-vegetarian").checked = ingredientType.lactoOvoVegetarian;
-		ingredientTypesRow.querySelector("input.lacto-vegetarian").checked = ingredientType.lactoVegetarian;
-		ingredientTypesRow.querySelector("input.vegan").checked = ingredientType.vegan;
+		this.centerArticle.append(ingredientTypeRow);
 
-		// when press "saveNewIngredient"  > post > ingredientTypesClone;
-		const saveNewIngredient = document.querySelector("section.ingredient-type-editor > button.saveNewIngredient");
-		saveNewIngredient.addEventListener("click", event => this.updateIngredientTypeData(ingredientType));
-		
+		if (ingredientType){
+			ingredientTypeRow.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
+			ingredientTypeRow.querySelector("input.alias").value = ingredientType.alias;
+			ingredientTypeRow.querySelector("input.description").value = ingredientType.description;
+			ingredientTypeRow.querySelector("input.pescatarian").checked = ingredientType.pescatarian;
+			ingredientTypeRow.querySelector("input.lacto-ovo-vegetarian").checked = ingredientType.lactoOvoVegetarian;
+			ingredientTypeRow.querySelector("input.lacto-vegetarian").checked = ingredientType.lactoVegetarian;
+			ingredientTypeRow.querySelector("input.vegan").checked = ingredientType.vegan;	
+		}else{
+			ingredientTypeRow.querySelector("img.avatar").src = "/services/ingredient-types/1/avatar?cache-bust=" + Date.now();
+		}
+
 		/*
-		//send clone to submitAvatar for id?
-		submitAvatar(ingredientType);
+		ingredientTypeRow.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
+		ingredientTypeRow.querySelector("input.alias").value = ingredientType.alias;
+		ingredientTypeRow.querySelector("input.description").value = ingredientType.description;
+		ingredientTypeRow.querySelector("input.pescatarian").checked = ingredientType.pescatarian;
+		ingredientTypeRow.querySelector("input.lacto-ovo-vegetarian").checked = ingredientType.lactoOvoVegetarian;
+		ingredientTypeRow.querySelector("input.lacto-vegetarian").checked = ingredientType.lactoVegetarian;
+		ingredientTypeRow.querySelector("input.vegan").checked = ingredientType.vegan;
 		*/
-		const templateForAvatar = document.querySelector("head > template.ingredient-type-editor-result-row ");
-		const avatarSection = templateForAvatar.content.firstElementChild.cloneNode(true);
-		const avatarImage = avatarSection.querySelector("img.avatar");
-		avatarImage.addEventListener("drop", event => this.submitAvatar(event => this.submitAvatar(event.dataTransfer.files[0])));
-		avatarImage.addEventListener("drop", event => this.submitAvatar(event => this.submitAvatar(ingredientType)));
+
+		console.log("avatar ID: " + ingredientType.identity);
+		console.log("alias: " + ingredientTypeRow.querySelector("input.alias").value);
+
+		//drop event for avatar -> submitAvatar > send dropfile + ingredientType
+		const avatarImage = ingredientTypeRow.querySelector("img.avatar");
+		avatarImage.addEventListener("drop", event => this.submitAvatar(event.dataTransfer.files[0], ingredientType));
+
+
+		
+
 	}
+
+
 
 	async updateIngredientTypeData(ingredientType){
 		console.log("updateIngredientTypeData");
@@ -152,13 +162,19 @@ class IngredientTypeEditorController extends Controller {
 		//add ingredientTypeClone avatar update
 		
 		/*
-		const ingredientElement = document.querySelector("div.ingredient-type-editor-result> table > tbody > tr > td > ");
-		const theWay = ingredientElement.querySelector("input.alias").value;
+		const ingredientElements = document.querySelectorAll("div.ingredient-type-editor-result tbody > tr");
+		const theWay = ingredientElements.querySelector("input.alias");
 		console.log("this is the way : " + theWay);
 		*/
+		console.log("!!! this is working : " + document.querySelector("div.ingredient-type-editor-result tbody input.alias").value);
+		const ingredientElements = document.querySelector("div.ingredient-type-editor-result tbody");
+		const ingredientElement = ingredientElements.querySelector("input.alias");
+		console.log("+++++++ ingredientElement : " + ingredientElement.value);
+
+
 
 		ingredientTypeClone.identity = ingredientType.identity;
-		ingredientTypeClone.alias = document.querySelector("div.ingredient-type-editor-result> table > tbody > tr > td > input.alias").value.trim() || null;
+		ingredientTypeClone.alias = document.querySelector("div.ingredient-type-editor-result tbody input.alias").value.trim() || null;
 		ingredientTypeClone.description = document.querySelector("div.ingredient-type-editor-result> table > tbody > tr > td > input.description").value.trim() || null;
 		
 		ingredientTypeClone.pescatarian = document.querySelector("div.ingredient-type-editor-result> table > tbody > tr > td > input.pescatarian").checked || false;
@@ -186,33 +202,53 @@ class IngredientTypeEditorController extends Controller {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
 		
+		
 	}
 	
 	
 	async submitAvatar (dropFile, ingredientType) {
-		console.log("submit Avatar got the ingr. : " + ingredientType.alias );
-
+		console.log("submitAvatar: " + dropFile);
+		console.log("submit Avatar got the ingredientType.alias : " + ingredientType.alias );
+		
+		//html > body > main > article.center > div.ingredient-type-editor-result > table > tbody > tr > td > img.avatar
 		//const preferencesSection = this.centerArticle.querySelector("type-editor-result-row");
 		const avatarSection = this.centerArticle.querySelector("type-editor-result-row");
-
-
+		
+		
 		this.messageElement.value = "";
 		try {
 			if (!dropFile.type || !dropFile.type.startsWith("image/")) throw new RangeError("avatar file must be an image!");
-
+			
 			// PUT /services/ingredient-types/id/avatar
-			const resource = "/services/ingredient-types/" + "4" + "/avatar";
+			const resource = "/services/ingredient-types/" + ingredientType.identity + "/avatar";
 			const response = await fetch(resource, { method: "PUT", headers: { "Content-Type": dropFile.type, "Accept": "text/plain" }, body: dropFile });
+			console.log("POST this avatar: " + response);
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
 			this.sessionOwner.avatarReference = Number.parseInt(await response.text());
-			this.messageElement.value = "ok";
-
-			avatarSection.querySelector("img.avatar").src = "/services/ingredient-types/" + person.identity + "/avatar?cache-bust=" + Date.now();
+			this.messageElement.value = "avatar updated";
+			
+			avatarSection.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
 	}
 
+
+	async addNewIngredientType() {
+		console.log("addNewIngredientType");
+		
+		//display table header same as in editIngredientType
+		this.editIngredientType(null);
+		
+		//display table empty row same as in editIngredientType
+
+		//activate "save recipe" button same as in displayIngredientTypes
+
+		//send this ingredientType to updateIngredientTypeData(ingredientType)
+
+	
+	
+	}
 
 }
 

@@ -18,10 +18,12 @@ class PreferencesController extends Controller {
 		this.centerArticle.append(preferencesSection);
 
 		const avatarImage = preferencesSection.querySelector("img.avatar");
+		avatarImage.addEventListener("drop", event => this.submitAvatar(event.dataTransfer.files[0]));
+		
 		const submitButton = preferencesSection.querySelector("button.submit");
-		const addPhoneButton = preferencesSection.querySelector("button.add-phone");
-		avatarImage.addEventListener("drop", event => this.submitAvatar(event => this.submitAvatar(event.dataTransfer.files[0])));
 		submitButton.addEventListener("click", event => this.submitData());
+		
+		const addPhoneButton = preferencesSection.querySelector("button.add-phone");
 		addPhoneButton.addEventListener("click", event => this.addPhoneInput(null));
 
 		this.displaySessionOwner ();
@@ -119,8 +121,9 @@ class PreferencesController extends Controller {
 
 		this.messageElement.value = "";
 		try {
+			console.log("dropfile.type: " + dropFile.type);
 			if (!dropFile.type || !dropFile.type.startsWith("image/")) throw new RangeError("avatar file must be an image!");
-
+			
 			// PUT /services/people/id/avatar
 			const resource = "/services/people/" + this.sessionOwner.identity + "/avatar";
 			const response = await fetch(resource, { method: "PUT", headers: { "Content-Type": dropFile.type, "Accept": "text/plain" }, body: dropFile });
@@ -128,7 +131,7 @@ class PreferencesController extends Controller {
 			this.sessionOwner.avatarReference = Number.parseInt(await response.text());
 			this.messageElement.value = "ok";
 
-			preferencesSection.querySelector("img.avatar").src = "/services/people/" + person.identity + "/avatar?cache-bust=" + Date.now();
+			preferencesSection.querySelector("img.avatar").src = "/services/people/" + this.sessionOwner.identity + "/avatar?cache-bust=" + Date.now();
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
