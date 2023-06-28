@@ -12,6 +12,7 @@
 		<script type="module" src="js/preferences-controller.js"></script>
 		<script type="module" src="js/ingredient-types-controller.js"></script>
 		<script type="module" src="js/recipe-query-controller.js"></script>
+		<script type="module" src="js/recipe-editor-controller.js"></script>
 
 		<template class="authentication">
 			<section class="authentication">
@@ -269,9 +270,10 @@
 		<template class="recipe-view">
 			<section class="recipe-view">
 				<div class="recipe">
+
 					<div>
 						<label class="default">Avatar</label>
-						<img class="avatar vertical-center" src="." />
+						<img class="avatar vertical-center" src="." ondragover="event.preventDefault()" ondrop="event.preventDefault()" />
 					</div>
 					<div class="flex">
 						<div class="left">
@@ -326,7 +328,7 @@
 						</div>
 					</div>
 				</div>
-
+				
 				<div class="table recipe-ingredients">
 					<table>
 						<thead>
@@ -345,15 +347,17 @@
 						</tbody>
 					</table>
 				</div>
-
+				<div>
+					<button class="save-recipe-changes" type="button">Änderung Speichern</button>
+				</div>
 				<div class="recipe-illustrations">
 				</div>
 			</section>
 		</template>
-
+		
 		<template class="recipe-ingredient-view">
 			<tr class="recipe-ingredient">
-				<td><img class="avatar" src="." /></td>
+				<td><img class="avatar" src="."/></td>
 				<td><input class="alias" type="text" readonly="true"/></td>
 				<td><input class="amount" type="number" min="0" step="1" readonly="true"/></td>
 				<td>

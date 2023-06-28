@@ -1,4 +1,4 @@
-import Controller from "../../util/controller.js";
+import Controller from "../../../util/controller.js";
 
 
 class PreferencesController extends Controller {
@@ -10,21 +10,21 @@ class PreferencesController extends Controller {
 
 	async activate () {
 		console.log("preferences controller activating.");
-		const template = document.querySelector("head > template.preferences");
-		const preferencesSection = template.content.firstElementChild.cloneNode(true);
+		const sectionTemplate = document.querySelector("head > template.preferences");
+		const preferencesSection = sectionTemplate.content.firstElementChild.cloneNode(true);
 
 		while (this.centerArticle.lastElementChild)
 			this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(preferencesSection);
 
-		const avatarImage = preferencesSection.querySelector("img.avatar");
+		const avatarView = preferencesSection.querySelector("img.avatar");
 		const submitButton = preferencesSection.querySelector("button.submit");
 		const addPhoneButton = preferencesSection.querySelector("button.add-phone");
-		avatarImage.addEventListener("drop", event => this.submitAvatar(event => this.submitAvatar(event.dataTransfer.files[0])));
+		avatarView.addEventListener("drop", event => this.submitAvatar(event.dataTransfer.files[0]));
 		submitButton.addEventListener("click", event => this.submitData());
 		addPhoneButton.addEventListener("click", event => this.addPhoneInput(null));
 
-		this.displaySessionOwner ();
+		this.displaySessionOwner();
 	}
 
 
@@ -35,7 +35,6 @@ class PreferencesController extends Controller {
 	displaySessionOwner () {
 		const preferencesSection = this.centerArticle.querySelector("section.preferences");
 		preferencesSection.querySelector("img.avatar").src = "/services/people/" + this.sessionOwner.identity + "/avatar?cache-bust=" + Date.now();
-		preferencesSection.querySelector("input.identity").value = this.sessionOwner.identity;
 		preferencesSection.querySelector("input.email").value = this.sessionOwner.email;
 		preferencesSection.querySelector("select.group").value = this.sessionOwner.group;
 		preferencesSection.querySelector("input.title").value = this.sessionOwner.name.title;
@@ -47,7 +46,8 @@ class PreferencesController extends Controller {
 		preferencesSection.querySelector("input.postcode").value = this.sessionOwner.address.postcode;
 
 		const phonesElement = preferencesSection.querySelector("fieldset > div.phones");
-		phonesElement.innerHTML = "";
+		while (phonesElement.lastElementChild)
+			phonesElement.lastElementChild.remove();
 		for (const phone of this.sessionOwner.phones)
 			this.addPhoneInput(phone);
 	}
@@ -73,7 +73,6 @@ class PreferencesController extends Controller {
 		const personClone = window.structuredClone(this.sessionOwner);
 
 		const password = preferencesSection.querySelector("input.password").value.trim() || null;
-		personClone.identity = preferencesSection.querySelector("input.identity").value.trim() || null;
 		personClone.email = preferencesSection.querySelector("input.email").value.trim() || null;
 		personClone.group = preferencesSection.querySelector("select.group").value.trim() || null;
 		personClone.name.title = preferencesSection.querySelector("input.title").value.trim() || null;
@@ -128,7 +127,7 @@ class PreferencesController extends Controller {
 			this.sessionOwner.avatarReference = Number.parseInt(await response.text());
 			this.messageElement.value = "ok";
 
-			preferencesSection.querySelector("img.avatar").src = "/services/people/" + person.identity + "/avatar?cache-bust=" + Date.now();
+			preferencesSection.querySelector("img.avatar").src = "/services/people/" + this.sessionOwner.identity + "/avatar?cache-bust=" + Date.now();
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}

@@ -251,7 +251,7 @@ section.recipe-view {
 
 
 section.recipe-view > div.recipe img.avatar {
-	width: 6.8em;
+	width: 15em;
 }
 
 
@@ -282,6 +282,8 @@ section.recipe-view > div.recipe-ingredients {
 
 section.recipe-view > div.recipe-ingredients img.avatar {
 	width: 3em;
+	height: 3em;
+	
 }
 
 section.recipe-view > div.recipe-ingredients input[type='number'] {
@@ -292,7 +294,6 @@ section.recipe-view > div.recipe-ingredients table {
 	background: ghostwhite;
 }
 
-
 section.recipe-view > div.table {
 	height: 16em;
 	overflow-y: auto;
@@ -301,6 +302,11 @@ section.recipe-view > div.table {
 
 section.recipe-view > div.table tr {
 	border: 1px solid black;
+}
+
+section.recipe-view > div button.edit {
+	margin-top: 1em;
+	margin-left: 0.5em;
 }
 
 

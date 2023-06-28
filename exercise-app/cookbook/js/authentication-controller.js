@@ -1,5 +1,5 @@
-import Controller from "../../util/controller.js";
-import xhr from "../../util/xhr.js";
+import Controller from "../../../util/controller.js";
+import xhr from "../../../util/xhr.js";
 
 
 class AuthenticationController extends Controller {
@@ -18,8 +18,8 @@ class AuthenticationController extends Controller {
 			if (!menuButton.classList.contains("authentication"))
 				menuButton.disabled = true;
 
-		const template = document.querySelector("head > template.authentication");
-		const authenticationSection = template.content.firstElementChild.cloneNode(true);
+		const sectionTemplate = document.querySelector("head > template.authentication");
+		const authenticationSection = sectionTemplate.content.firstElementChild.cloneNode(true);
 
 		while (this.centerArticle.lastElementChild)
 			this.centerArticle.lastElementChild.remove();

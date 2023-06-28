@@ -53,6 +53,10 @@ body {
 	font-family: sans-serif;
 }
 
+body .img.avatar{
+	width: 4em;
+}
+
 
 label, output, input, textarea {
 	display: inline-block;
@@ -310,11 +314,23 @@ section.recipe-editor-view > div.recipe-illustrations iframe, div.recipe-illustr
 	width: 480px;
 }
 
+html > bodv > main > article.center > section.recine-editor > div{
+	margin-bottom: 1em;
+}
+
 /*
 ingredient-type
 */
 html > body > main > article.center > div.ingredient-type-editor-result > table > tbody > tr > td > img.avatar{
 	width: 4em;
+}
+
+html > body > main > article.center > tr > td > img.avatar{
+	width: 4em;
+}
+
+html > body > main > article.center > section.ingredient-type-editor{
+	margin-bottom: 1em;
 }
 
 
@@ -333,3 +349,7 @@ fieldset.addNewRecipe > div > textarea{
 	padding: 0.5em;
 	
 }
+
+
+/*
+*/

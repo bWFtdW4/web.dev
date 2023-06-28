@@ -1,22 +1,29 @@
-import Controller from "../../util/controller.js";
+import Controller from "../../../util/controller.js";
 
 
 class RecipeController extends Controller {
+	#pageOffset;
+	#pageSize;
+
+
 	constructor () {
 		super();
+
+		this.#pageOffset = 0;
+		this.#pageSize = 5;
 	}
 
 
 	async activate () {
 		console.log("recipe-query controller activating.");
-		const template = document.querySelector("head > template.recipe-query");
-		const recipeQuerySection = template.content.firstElementChild.cloneNode(true);
+		const sectionTemplate = document.querySelector("head > template.recipes-query");
+		const recipesQuerySection = sectionTemplate.content.firstElementChild.cloneNode(true);
 
 		while (this.centerArticle.lastElementChild)
 			this.centerArticle.lastElementChild.remove();
-		this.centerArticle.append(recipeQuerySection);
+		this.centerArticle.append(recipesQuerySection);
 
-		const searchButton = recipeQuerySection.querySelector("button.search");
+		const searchButton = recipesQuerySection.querySelector("button.search");
 		searchButton.addEventListener("click", event => this.queryRecipes());
 	}
 
@@ -27,26 +34,26 @@ class RecipeController extends Controller {
 
 
 	async queryRecipes () {
-		const recipeQuerySection = this.centerArticle.querySelector("section.recipe-query");
+		const recipesQuerySection = this.centerArticle.querySelector("section.recipes-query");
 		const parameterization = new URLSearchParams();
 		let value;
 		
-		value = recipeQuerySection.querySelector("input.title").value || null;
+		value = recipesQuerySection.querySelector("input.title").value || null;
 		if (value) parameterization.set("title", value);
 
-		value = recipeQuerySection.querySelector("input.description-fragment").value || null;
+		value = recipesQuerySection.querySelector("input.description-fragment").value || null;
 		if (value) parameterization.set("description-fragment", value);
 		
-		value = recipeQuerySection.querySelector("input.instruction-fragment").value || null;
+		value = recipesQuerySection.querySelector("input.instruction-fragment").value || null;
 		if (value) parameterization.set("instruction-fragment", value);
 
-		value = recipeQuerySection.querySelector("input.owner-email").value || null;
+		value = recipesQuerySection.querySelector("input.owner-email").value || null;
 		if (value) parameterization.set("owner-email", value);
 
-		value = recipeQuerySection.querySelector("select.category").value || null;
+		value = recipesQuerySection.querySelector("select.category").value || null;
 		if (value) parameterization.set("category", value);
 
-		value = recipeQuerySection.querySelector("select.restriction").value || null;
+		value = recipesQuerySection.querySelector("select.restriction").value || null;
 		switch (value) {
 			default:
 				break;
@@ -64,59 +71,72 @@ class RecipeController extends Controller {
 				break;
 		}
 
-		let recipes = [];
+		const template = document.querySelector("head > template.recipes-view");
+		const recipesViewSection = template.content.firstElementChild.cloneNode(true);
+
+		while (!this.centerArticle.lastElementChild.classList.contains("recipes-query"))
+			this.centerArticle.lastElementChild.remove();
+		this.centerArticle.append(recipesViewSection);
+
+		recipesViewSection.querySelector("button.backward").addEventListener("click", event => this.displayRecipes(parameterization, -this.#pageSize));
+		recipesViewSection.querySelector("button.forward").addEventListener("click", event => this.displayRecipes(parameterization, +this.#pageSize));
+
+		this.#pageOffset = 0;
+		this.displayRecipes(parameterization, 0);
+	}
+
+
+	async displayRecipes (parameterization, pageOffset) {
+		this.#pageOffset += pageOffset;
+		parameterization.set("result-offset", this.#pageOffset);
+		parameterization.set("result-size", this.#pageSize);
+
+		let recipes;
 		this.messageElement.value = "";
 		try {
 			// GET /services/recipes
-			const resource = "/services/recipes" + (parameterization.size === 0 ? "" : "?" + parameterization);
+			const resource = "/services/recipes?" + parameterization;
 			const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
 			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
 			recipes = await response.json();
 			this.messageElement.value = "ok";
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
+			return;
 		}
 
-		this.displayRecipes(recipes);
-	}
+		const recipesViewSection = this.centerArticle.querySelector("section.recipes-view");
+		recipesViewSection.querySelector("button.backward").disabled = (this.#pageOffset < this.#pageSize);
+		recipesViewSection.querySelector("button.forward").disabled = (recipes.length < this.#pageSize);
 
-
-	displayRecipes (recipes) {
-		const template = document.querySelector("head > template.recipe-query-result");
-		const recipeQueryResultSection = template.content.firstElementChild.cloneNode(true);
-		
-		while (!this.centerArticle.lastElementChild.classList.contains("recipe-query"))
-			this.centerArticle.lastElementChild.remove();
-		this.centerArticle.append(recipeQueryResultSection);
-
-		const recipeTableBody = recipeQueryResultSection.querySelector("table > tbody");
-		const rowTemplate = document.querySelector("head > template.recipe-query-result-row");
+		const recipeTableBody = recipesViewSection.querySelector("div.table tbody");
+		const recipeRowTemplate = document.querySelector("head > template.recipe-view-row");
 		for (const recipe of recipes) {
-			const recipeRow = rowTemplate.content.firstElementChild.cloneNode(true);
+			const recipeRow = recipeRowTemplate.content.firstElementChild.cloneNode(true);
 			recipeTableBody.append(recipeRow);
 
-			recipeRow.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar?cache-bust=" + Date.now();
+			recipeRow.querySelector("img.avatar").addEventListener("click", event => this.displayRecipe(recipe));
+
+			recipeRow.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar";
 			recipeRow.querySelector("input.title").value = recipe.title;
 			recipeRow.querySelector("select.category").value = recipe.category;
 			recipeRow.querySelector("input.pescatarian").checked = recipe.pescatarian;
 			recipeRow.querySelector("input.lacto-ovo-vegetarian").checked = recipe.lactoOvoVegetarian;
 			recipeRow.querySelector("input.lacto-vegetarian").checked = recipe.lactoVegetarian;
 			recipeRow.querySelector("input.vegan").checked = recipe.vegan;
-
-			recipeRow.querySelector("img.avatar").addEventListener("click", event => this.displayRecipe(recipe));
 		}
 	}
 
 
-	displayRecipe (recipe) {
+	async displayRecipe (recipe) {
 		const template = document.querySelector("head > template.recipe-view");
 		const recipeViewSection = template.content.firstElementChild.cloneNode(true);
 
-		// while (!this.centerArticle.lastElementChild.classList.contains("recipe-view"))
-		//	this.centerArticle.lastElementChild.remove();
+		while (!this.centerArticle.lastElementChild.classList.contains("recipes-view"))
+			this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(recipeViewSection);
 
-		recipeViewSection.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar?cache-bust=" + Date.now();
+		recipeViewSection.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar";
 		recipeViewSection.querySelector("select.category").value = recipe.category;
 		recipeViewSection.querySelector("input.title").value = recipe.title;
 		recipeViewSection.querySelector("textarea.description").value = recipe.description;
@@ -126,11 +146,15 @@ class RecipeController extends Controller {
 		recipeViewSection.querySelector("input.lacto-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoVegetarian, true);
 
 		const ingredientsElement = recipeViewSection.querySelector("div.recipe-ingredients tbody");
-		ingredientsElement.innerHTML = "";
+		while (ingredientsElement.lastElementChild)
+			ingredientsElement.lastElementChild.remove();
+		
+		//hide save-recipe-changes button
+		recipeViewSection.querySelector("button.save-recipe-changes").style.display = "none";
 
-		const ingredientTemplate = document.querySelector("head > template.recipe-ingredient-row");
+		const ingredientViewTemplate = document.querySelector("head > template.recipe-ingredient-view");
 		for (const ingredient of recipe.ingredients) {
-			const ingredientElement = ingredientTemplate.content.firstElementChild.cloneNode(true);
+			const ingredientElement = ingredientViewTemplate.content.firstElementChild.cloneNode(true);
 			ingredientsElement.append(ingredientElement);
 
 			ingredientElement.querySelector("select.unit").value = ingredient.unit;
@@ -141,6 +165,23 @@ class RecipeController extends Controller {
 			ingredientElement.querySelector("input.lacto-ovo-vegetarian").checked = ingredient.lactoOvoVegetarian;
 			ingredientElement.querySelector("input.lacto-vegetarian").checked = ingredient.lactoVegetarian;
 			ingredientElement.querySelector("input.vegan").checked = ingredient.vegan;
+		}
+		//hide
+
+		if (recipe.ownerReference) {
+			this.messageElement.value = "";
+			try {
+				// GET /services/people/id
+				const resource = "/services/people/" + recipe.ownerReference;
+				const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
+				if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
+				const owner = await response.json();
+				this.messageElement.value = "ok";
+
+				recipeViewSection.querySelector("input.owner-email").value = owner.email;
+			} catch (error) {
+				this.messageElement.value = error.message || "a problem occurred!";
+			}
 		}
 	}
 }

@@ -110,13 +110,13 @@ class IngredientTypeEditorController extends Controller {
 		const templateRow = document.querySelector("head > template.ingredient-type-editor-result-row");
 		const ingredientTypeRow = templateRow.content.firstElementChild.cloneNode(true);
 		const ingredientTypeTableBody = document.querySelector("div.ingredient-type-editor-result tbody");
-		ingredientTypeTableBody.append(ingredientTypeRow);
+		if (ingredientType) ingredientTypeTableBody.append(ingredientTypeRow);
 
 		while (!this.centerArticle.lastElementChild.classList.contains("ingredient-type-editor"))
 		this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(ingredientTypeRow);
 
-		if (ingredientType){
+		//if (ingredientType){
 			ingredientTypeRow.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
 			ingredientTypeRow.querySelector("input.alias").value = ingredientType.alias;
 			ingredientTypeRow.querySelector("input.description").value = ingredientType.description;
@@ -124,27 +124,20 @@ class IngredientTypeEditorController extends Controller {
 			ingredientTypeRow.querySelector("input.lacto-ovo-vegetarian").checked = ingredientType.lactoOvoVegetarian;
 			ingredientTypeRow.querySelector("input.lacto-vegetarian").checked = ingredientType.lactoVegetarian;
 			ingredientTypeRow.querySelector("input.vegan").checked = ingredientType.vegan;	
-		}else{
-			ingredientTypeRow.querySelector("img.avatar").src = "/services/ingredient-types/1/avatar?cache-bust=" + Date.now();
-		}
+		//}else{
+		//	ingredientTypeRow.querySelector("img.avatar").src = "/services/documents/1?cache-bust=" + Date.now();
+		//}
 
-		/*
-		ingredientTypeRow.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
-		ingredientTypeRow.querySelector("input.alias").value = ingredientType.alias;
-		ingredientTypeRow.querySelector("input.description").value = ingredientType.description;
-		ingredientTypeRow.querySelector("input.pescatarian").checked = ingredientType.pescatarian;
-		ingredientTypeRow.querySelector("input.lacto-ovo-vegetarian").checked = ingredientType.lactoOvoVegetarian;
-		ingredientTypeRow.querySelector("input.lacto-vegetarian").checked = ingredientType.lactoVegetarian;
-		ingredientTypeRow.querySelector("input.vegan").checked = ingredientType.vegan;
-		*/
-
-		console.log("avatar ID: " + ingredientType.identity);
+		if (ingredientType) console.log("avatar ID: " + ingredientType.identity);
 		console.log("alias: " + ingredientTypeRow.querySelector("input.alias").value);
 
 		//drop event for avatar -> submitAvatar > send dropfile + ingredientType
 		const avatarImage = ingredientTypeRow.querySelector("img.avatar");
 		avatarImage.addEventListener("drop", event => this.submitAvatar(event.dataTransfer.files[0], ingredientType));
 
+		// when press "saveNewIngredient"  > post > ingredientTypesClone;
+		const saveNewIngredient = document.querySelector("section.ingredient-type-editor > button.saveNewIngredient");
+		saveNewIngredient.addEventListener("click", event => this.updateIngredientTypeData(ingredientType));
 
 		
 
@@ -156,23 +149,25 @@ class IngredientTypeEditorController extends Controller {
 		console.log("updateIngredientTypeData");
 		console.log("what is in the box :" + ingredientType + " name: " + ingredientType.alias);
 
+		//create clone of ingredientType
 		const ingredientTypeClone = window.structuredClone(ingredientType);
 		console.log("__ingredientTypeClone created with id: " + ingredientTypeClone.identity);
 		
-		//add ingredientTypeClone avatar update
 		
-		/*
-		const ingredientElements = document.querySelectorAll("div.ingredient-type-editor-result tbody > tr");
-		const theWay = ingredientElements.querySelector("input.alias");
-		console.log("this is the way : " + theWay);
-		*/
-		console.log("!!! this is working : " + document.querySelector("div.ingredient-type-editor-result tbody input.alias").value);
-		const ingredientElements = document.querySelector("div.ingredient-type-editor-result tbody");
+		//check the path of ingredientType input
+		//html > bodv > main > article.center > tr > td > inputalias
+		//bad console.log("check1: " + document.querySelector("div.ingredient-type-editor-result tbody input.alias").value || null);
+		//bad console.log("check2: " + document.querySelector("div.ingredient-type-editor-result> table > tbody > tr > td > input.alias").value || null);
+		//bad console.log("check3: " + document.querySelector("bodv > main > article.center > tr > td > inputalias").value || null);
+		//bad console.log("check4: " + document.querySelector("input.alias").value || null);
+		
+		
+		const ingredientElements = document.querySelector("ingredient-type-editor-result-row");
+		console.log("+++++++ ingredientElements : " + ingredientElements);
 		const ingredientElement = ingredientElements.querySelector("input.alias");
 		console.log("+++++++ ingredientElement : " + ingredientElement.value);
 
-
-
+		//update ingredientTypeClone with new data
 		ingredientTypeClone.identity = ingredientType.identity;
 		ingredientTypeClone.alias = document.querySelector("div.ingredient-type-editor-result tbody input.alias").value.trim() || null;
 		ingredientTypeClone.description = document.querySelector("div.ingredient-type-editor-result> table > tbody > tr > td > input.description").value.trim() || null;
@@ -241,8 +236,10 @@ class IngredientTypeEditorController extends Controller {
 		this.editIngredientType(null);
 		
 		//display table empty row same as in editIngredientType
+		//>done via editIngredientType(null)
 
 		//activate "save recipe" button same as in displayIngredientTypes
+		
 
 		//send this ingredientType to updateIngredientTypeData(ingredientType)
 
