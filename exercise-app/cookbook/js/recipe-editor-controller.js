@@ -12,7 +12,7 @@ class RecipeEditorController extends Controller {
 		this.#pageOffset = 0;
 		this.#pageSize = 5;
 
-		//inisialize ingredients-types
+		//TODO: inisialize ingredients-types
 
 		
 	}
@@ -30,13 +30,12 @@ class RecipeEditorController extends Controller {
 		const searchButton = recipesQuerySection.querySelector("button.search");
 		searchButton.addEventListener("click", event => this.queryRecipes());
 		
-		this.hideSearch();
 		
 		//create-new-recipe button
 		const newRecipeButton = recipesQuerySection.querySelector("button.create-new-recipe");
 		newRecipeButton.addEventListener("click", event => console.log("create-new-recipe button clicked"));
 		newRecipeButton.addEventListener("click", event => this.displayRecipe(null));
-
+		
 		this.queryRecipes ();
 
 	}
@@ -47,13 +46,28 @@ class RecipeEditorController extends Controller {
 	}
 
 	hideSearch(){
-		console.log("todo: hiding search");
+		const recipesQuerySection = this.centerArticle.querySelector("section.recipes-query");
+		recipesQuerySection.querySelector("input.title").style.display = "none";
+		recipesQuerySection.querySelector("input.description-fragment").style.display = "none";
+		recipesQuerySection.querySelector("input.instruction-fragment").style.display = "none";
+		recipesQuerySection.querySelector("input.owner-email").style.display = "none";
+		recipesQuerySection.querySelector("select.category").style.display = "none";
+		recipesQuerySection.querySelector("select.restriction").style.display = "none";
+		recipesQuerySection.querySelector("button.search").style.display = "none";
+		//recipesQuerySection.querySelector("button.create-new-recipe").style.display = "none";
 
-		//hide elements from template recipes-query
+		recipesQuerySection.querySelector("label.q-title").style.display = "none";
+		recipesQuerySection.querySelector("label.q-description-fragment").style.display = "none";
+		recipesQuerySection.querySelector("label.q-instruction-fragment").style.display = "none";
+		recipesQuerySection.querySelector("label.q-owner-email").style.display = "none";
+		recipesQuerySection.querySelector("label.q-category").style.display = "none";
+		recipesQuerySection.querySelector("label.q-restriction").style.display = "none";
 
 	}
 
+
 	async queryRecipes () {
+		this.hideSearch();
 		const recipesQuerySection = this.centerArticle.querySelector("section.recipes-query");
 		const parameterization = new URLSearchParams();
 		let value;
@@ -160,9 +174,13 @@ class RecipeEditorController extends Controller {
 		
 		//add add-new-ingredient button event
 		recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => console.log("add-new-ingredient pressed"));
+		recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => this.addIngredient (recipe));
+
 
 		//submitData (recipe)
 		recipeViewSection.querySelector("button.save-recipe-changes").addEventListener("click", event => console.log("2-save-recipe-changes button clicked"));
+		recipeViewSection.querySelector("button.save-recipe-changes").addEventListener("click", event => this.submitData(recipe));
+		
 
 		//change input readonly attribute to false
 		recipeViewSection.querySelector("input.title").readOnly = false;
@@ -218,6 +236,9 @@ class RecipeEditorController extends Controller {
 				ingredientElement.querySelector("img.avatar").addEventListener("click", event => console.log("removing : " + ingredient.alias));
 				ingredientElement.querySelector("img.avatar").addEventListener("click", event => ingredientElement.remove());
 			}
+
+			
+
 		}else{
 			console.log("recipe is null");
 
@@ -225,10 +246,9 @@ class RecipeEditorController extends Controller {
 			recipeViewSection.querySelector("img.avatar").src = "/services/documents/1";
 		}
 
-		//checkbox automaticly checked according to ingredienttype
+		//TODO: checkbox automaticly checked according to ingredienttype
 	
 
-		
 
 		//check if recipe is null > assign owner
 		if (recipe){
@@ -251,88 +271,65 @@ class RecipeEditorController extends Controller {
 
 		}
 
-	
 
 	
 	}
 
+	//function to add a new ingredient row to the recipe
+	/*example to add:
+		addPhoneInput (phone) {
+			const preferencesSection = this.centerArticle.querySelector("section.preferences");
+			const phonesElement = preferencesSection.querySelector("fieldset > div.phones");
 
-	/* no need for this function !! build in displayRecipe
+			const divElement = document.createElement("div");
+			phonesElement.append(divElement);
 
-	//edit recipe = get recipe > new recipe values > submit recipe || new recipe > submit recipe
-	async editRecipe (recipe){
-		console.log("-------------editRecipe (recipe) starting...");
-		const sectionTemplate = document.querySelector("head > template.recipe-view");
-		const recipeViewSection = sectionTemplate.content.firstElementChild.cloneNode(true);
-
-		//check if recipe is null
-		if (recipe){
-			console.log("recipe is not null");
-
-			//get new values
-			const recipeAvatar = recipeViewSection.querySelector("img.avatar");
-			const recipeTitle = recipeViewSection.querySelector("input.title");
-			const recipeDescription = recipeViewSection.querySelector("textarea.description");
-			const recipeInstruction = recipeViewSection.querySelector("textarea.instruction");
-			const recipePescatarian = recipeViewSection.querySelector("input.pescatarian");
-			const recipeCategory = recipeViewSection.querySelector("select.category");
-
-			//loop through recived ingredient-types and add to array
-			const recipeIngredients = [];
-			for (const ingredient of recipe.ingredients) {
-				console.log("  +adding ingredient to array: " + ingredient.alias);
-				recipeIngredients.push(ingredient);
-			}
-
-			//button click event add new ingredient-types to new array
-
-			//merge both arrays?
-
-			
-
-		}else{
-			console.log("recipe is null");
-
-			//clean area
-			while (this.centerArticle.lastElementChild.classList.contains("recipe-view"))
-				this.centerArticle.lastElementChild.remove();
-			this.centerArticle.append(recipeViewSection);
-
-
-			//avatar = default avatar
-			recipeViewSection.querySelector("img.avatar").src = "/services/documents/1";
-
-			//unlock all input fields
-			recipeViewSection.querySelector("input.title").readOnly = false;
-			recipeViewSection.querySelector("textarea.description").readOnly = false;
-			recipeViewSection.querySelector("textarea.instruction").readOnly = false;
-			recipeViewSection.querySelector("input.pescatarian").readOnly = false;
-			recipeViewSection.querySelector("select.category").disabled = false;
-
+			const phoneElement = document.createElement("input");
+			divElement.append(phoneElement);
+			phoneElement.className = "phone default";
+			phoneElement.type = "tel";
+			phoneElement.value = phone;
 		}
-
-
-		
-	}
 	*/
+	addIngredient (recipe){
+		console.log("++addIngredient (recipe) starting...");
+		
+		//get the template of ingredient row > clone it
+		const ingredientViewTemplate = document.querySelector("template.recipe-ingredient-view");
+		const ingredientElement = ingredientViewTemplate.content.firstElementChild.cloneNode(true);
+		//get the this.centerArticle of table body > append the clone
+		const ingredientsTable = this.centerArticle.querySelector("div.recipe-ingredients tbody");
+		ingredientsTable.append(ingredientElement);
+
+		ingredientElement.querySelector()
+
+	}
+
+	
 
 	constraintRestrictions (restriction) {
 
-		//how to connected?
+		//TODO: how to connected?
 
 	}
 
 
 	async submitData (recipe){
-		console.log("submitData (recipe): " + recipe.title);
+		if(recipe){
+			console.log("submitData (recipe): " + recipe.title);
+			const json = JSON.stringify(recipe);
+			console.log("sending: " + json);
+		}else{
+			console.log("uppps recipe is null or not completed");
+		}
 
-		//create clone
+		//TODO: create clone
 
-		//assign new version number
+		//TODO: assign new version number
 
-		//assign new values to input
+		//TODO: assign new values to input
 
-		// PUT /services/recipes/id
+		//TODO:  PUT /services/recipes/id
 
 	}
 

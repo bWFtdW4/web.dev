@@ -173,23 +173,23 @@
 		<template class="recipes-query">
 			<section class="recipes-query">
 				<div>
-					<label class="default">Titel</label>
+					<label class="q-title default">Titel</label>
 					<input class="title default" type="text" />
 				</div>
 				<div>
-					<label class="default">Beschreibung</label>
+					<label class="q-description-fragment default">Beschreibung</label>
 					<input class="description-fragment default" type="text" />
 				</div>
 				<div>
-					<label class="default">Anleitung</label>
+					<label class="q-instruction-fragment default">Anleitung</label>
 					<input class="instruction-fragment default" type="text" />
 				</div>
 				<div>
-					<label class="default">Email des Autors</label>
+					<label class="q-owner-email default">Email des Autors</label>
 					<input class="owner-email default" type="text" />
 				</div>
 				<div>
-					<label class="default">Restriktion</label>
+					<label class="q-restriction default">Restriktion</label>
 					<select class="restriction">
 						<option value=""></option>
 						<option value="PESCATARIAN">Pescatarisch</option>
@@ -199,7 +199,7 @@
 					</select>
 				</div>
 				<div>
-					<label class="default">Kategorie</label>
+					<label class="q-category default">Kategorie</label>
 					<select class="category">
 						<option value=""></option>
 						<option value="MAIN_COURSE">Hauptgericht</option>
@@ -358,7 +358,7 @@
 		</template>
 		
 		<template class="recipe-ingredient-view">
-			<tr class="recipe-ingredient">
+			<tr class="recipe-ingredient" id="test">
 				<td><img class="avatar" src="."/></td>
 				<td><input class="alias" type="text" readonly="true"/></td>
 				<td><input class="amount" type="number" min="0" step="1" readonly="true"/></td>
