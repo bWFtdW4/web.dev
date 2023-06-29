@@ -11,21 +11,33 @@ class RecipeEditorController extends Controller {
 
 		this.#pageOffset = 0;
 		this.#pageSize = 5;
+
+		//inisialize ingredients-types
+
+		
 	}
-
-
+	
+	
 	async activate () {
 		console.log("recipe-editor controller activating.");
 		const sectionTemplate = document.querySelector("head > template.recipes-query");
 		const recipesQuerySection = sectionTemplate.content.firstElementChild.cloneNode(true);
-
+		
 		while (this.centerArticle.lastElementChild)
-			this.centerArticle.lastElementChild.remove();
+		this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(recipesQuerySection);
-
+		
 		const searchButton = recipesQuerySection.querySelector("button.search");
 		searchButton.addEventListener("click", event => this.queryRecipes());
+		
+		this.hideSearch();
+		
+		//create-new-recipe button
+		const newRecipeButton = recipesQuerySection.querySelector("button.create-new-recipe");
+		newRecipeButton.addEventListener("click", event => console.log("create-new-recipe button clicked"));
+		newRecipeButton.addEventListener("click", event => this.displayRecipe(null));
 
+		this.queryRecipes ();
 
 	}
 
@@ -34,6 +46,12 @@ class RecipeEditorController extends Controller {
 		console.log("recipe-editor controller deactivating.");
 	}
 
+	hideSearch(){
+		console.log("todo: hiding search");
+
+		//hide elements from template recipes-query
+
+	}
 
 	async queryRecipes () {
 		const recipesQuerySection = this.centerArticle.querySelector("section.recipes-query");
@@ -131,70 +149,89 @@ class RecipeEditorController extends Controller {
 
 
 	async displayRecipe (recipe) {
+		if (recipe) console.log("displaying recipe: " + recipe.title);
 		const template = document.querySelector("head > template.recipe-view");
 		const recipeViewSection = template.content.firstElementChild.cloneNode(true);
 
 		while (!this.centerArticle.lastElementChild.classList.contains("recipes-view"))
 			this.centerArticle.lastElementChild.remove();
 		this.centerArticle.append(recipeViewSection);
-					
-		recipeViewSection.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar";
-		recipeViewSection.querySelector("select.category").value = recipe.category;
-		recipeViewSection.querySelector("input.title").value = recipe.title;
-		recipeViewSection.querySelector("textarea.description").value = recipe.description;
-		recipeViewSection.querySelector("textarea.instruction").value = recipe.instruction;
-		recipeViewSection.querySelector("input.pescatarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.pescatarian, true);
-		recipeViewSection.querySelector("input.lacto-ovo-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoOvoVegetarian, true);
-		recipeViewSection.querySelector("input.lacto-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoVegetarian, true);
+
+		
+		//add add-new-ingredient button event
+		recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => console.log("add-new-ingredient pressed"));
+
+		//submitData (recipe)
+		recipeViewSection.querySelector("button.save-recipe-changes").addEventListener("click", event => console.log("2-save-recipe-changes button clicked"));
 
 		//change input readonly attribute to false
 		recipeViewSection.querySelector("input.title").readOnly = false;
 		recipeViewSection.querySelector("textarea.description").readOnly = false;
 		recipeViewSection.querySelector("textarea.instruction").readOnly = false;
 		recipeViewSection.querySelector("input.pescatarian").readOnly = false;
+		recipeViewSection.querySelector("select.category").disabled = false;
 
-		//avatar drop event > submitData (recipe)
-		recipeViewSection.querySelector("img.avatar").addEventListener("click", event => {console.log("avatar clicked" + recipe.title ), this.submitAvatar(recipe)});
-		recipeViewSection.querySelector("img.avatar").addEventListener("drop", event => {console.log("avatar dropped" + recipe.title ), this.submitAvatar(recipe, event.dataTransfer.files[0])});
+		//check if recipe is null
+		if (recipe){
+			console.log("recipe is not null");
 
+			//avatar drop event > submitData (recipe)
+			recipeViewSection.querySelector("img.avatar").addEventListener("click", event => {console.log("avatar clicked" + recipe.title ), this.submitAvatar(recipe)});
+			recipeViewSection.querySelector("img.avatar").addEventListener("drop", event => {console.log("avatar dropped" + recipe.title ), this.submitAvatar(recipe, event.dataTransfer.files[0])});
 
+			recipeViewSection.querySelector("img.avatar").src = "/services/recipes/" + recipe.identity + "/avatar";
+			recipeViewSection.querySelector("select.category").value = recipe.category;
+			recipeViewSection.querySelector("input.title").value = recipe.title;
+			recipeViewSection.querySelector("textarea.description").value = recipe.description;
+			recipeViewSection.querySelector("textarea.instruction").value = recipe.instruction;
+			recipeViewSection.querySelector("input.pescatarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.pescatarian, true);
+			recipeViewSection.querySelector("input.lacto-ovo-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoOvoVegetarian, true);
+			recipeViewSection.querySelector("input.lacto-vegetarian").checked = recipe.ingredients.reduce((accu, ingredient) => accu && ingredient.lactoVegetarian, true);
 
-		const ingredientsElement = recipeViewSection.querySelector("div.recipe-ingredients tbody");
-		while (ingredientsElement.lastElementChild)
-			ingredientsElement.lastElementChild.remove();
+			const ingredientsElement = recipeViewSection.querySelector("div.recipe-ingredients tbody");
+			while (ingredientsElement.lastElementChild)
+				ingredientsElement.lastElementChild.remove();
 
-		//click event for edit button
-		recipeViewSection.querySelector("button.save-recipe-changes").addEventListener("click", event => console.log("save-recipe-changes button clicked"));
+			const ingredientViewTemplate = document.querySelector("head > template.recipe-ingredient-view");
+			for (const ingredient of recipe.ingredients) {
+				const ingredientElement = ingredientViewTemplate.content.firstElementChild.cloneNode(true);
+				ingredientsElement.append(ingredientElement);
 
-		const ingredientViewTemplate = document.querySelector("head > template.recipe-ingredient-view");
-		for (const ingredient of recipe.ingredients) {
-			const ingredientElement = ingredientViewTemplate.content.firstElementChild.cloneNode(true);
-			ingredientsElement.append(ingredientElement);
+				ingredientElement.querySelector("select.unit").value = ingredient.unit;
+				ingredientElement.querySelector("input.amount").value = ingredient.amount;
+				ingredientElement.querySelector("img.avatar").src = "/services/documents/" + ingredient.avatarReference;
+				ingredientElement.querySelector("input.alias").value = ingredient.alias;
+				ingredientElement.querySelector("input.pescatarian").checked = ingredient.pescatarian;
+				ingredientElement.querySelector("input.lacto-ovo-vegetarian").checked = ingredient.lactoOvoVegetarian;
+				ingredientElement.querySelector("input.lacto-vegetarian").checked = ingredient.lactoVegetarian;
+				ingredientElement.querySelector("input.vegan").checked = ingredient.vegan;
 
-			ingredientElement.querySelector("select.unit").value = ingredient.unit;
-			ingredientElement.querySelector("input.amount").value = ingredient.amount;
-			ingredientElement.querySelector("img.avatar").src = "/services/documents/" + ingredient.avatarReference;
-			ingredientElement.querySelector("input.alias").value = ingredient.alias;
-			ingredientElement.querySelector("input.pescatarian").checked = ingredient.pescatarian;
-			ingredientElement.querySelector("input.lacto-ovo-vegetarian").checked = ingredient.lactoOvoVegetarian;
-			ingredientElement.querySelector("input.lacto-vegetarian").checked = ingredient.lactoVegetarian;
-			ingredientElement.querySelector("input.vegan").checked = ingredient.vegan;
+				//mouseover event for avatar
+				ingredientElement.querySelector("img.avatar").addEventListener("mouseover", event => console.log("mouseover avatar" + ingredient.alias));
+				//when mouseover avatar, change avatar to a different one
+				ingredientElement.querySelector("img.avatar").addEventListener("mouseover", event => ingredientElement.querySelector("img.avatar").src = "/services/documents/111");
+				//mouseout event for avatar
+				ingredientElement.querySelector("img.avatar").addEventListener("mouseout", event => console.log("mouseout avatar" + ingredient.alias));
+				//when mouseout avatar, change avatar back to original one
+				ingredientElement.querySelector("img.avatar").addEventListener("mouseout", event => ingredientElement.querySelector("img.avatar").src = "/services/documents/" + ingredient.avatarReference);
+				//when avatar clicked remove from list
+				ingredientElement.querySelector("img.avatar").addEventListener("click", event => console.log("removing : " + ingredient.alias));
+				ingredientElement.querySelector("img.avatar").addEventListener("click", event => ingredientElement.remove());
+			}
+		}else{
+			console.log("recipe is null");
 
-			//mouseover event for avatar
-			ingredientElement.querySelector("img.avatar").addEventListener("mouseover", event => console.log("mouseover avatar" + ingredient.alias));
-			//when mouseover avatar, change avatar to a different one
-			ingredientElement.querySelector("img.avatar").addEventListener("mouseover", event => ingredientElement.querySelector("img.avatar").src = "/services/documents/111");
-			//mouseout event for avatar
-			ingredientElement.querySelector("img.avatar").addEventListener("mouseout", event => console.log("mouseout avatar" + ingredient.alias));
-			//when mouseout avatar, change avatar back to original one
-			ingredientElement.querySelector("img.avatar").addEventListener("mouseout", event => ingredientElement.querySelector("img.avatar").src = "/services/documents/" + ingredient.avatarReference);
-			//when avatar clicked remove from list
-			ingredientElement.querySelector("img.avatar").addEventListener("click", event => console.log("removing : " + ingredient.alias));
-			ingredientElement.querySelector("img.avatar").addEventListener("click", event => ingredientElement.remove());
-
+			//avatar = default avatar
+			recipeViewSection.querySelector("img.avatar").src = "/services/documents/1";
 		}
 
-		if (recipe.ownerReference) {
+		//checkbox automaticly checked according to ingredienttype
+	
+
+		
+
+		//check if recipe is null > assign owner
+		if (recipe){
 			this.messageElement.value = "";
 			try {
 				// GET /services/people/id
@@ -208,12 +245,94 @@ class RecipeEditorController extends Controller {
 			} catch (error) {
 				this.messageElement.value = error.message || "a problem occurred!";
 			}
+		}else{
+			//assign session owner to recipe
+			recipeViewSection.querySelector("input.owner-email").value = this.sessionOwner.email;
+
 		}
+
+	
+
+	
+	}
+
+
+	/* no need for this function !! build in displayRecipe
+
+	//edit recipe = get recipe > new recipe values > submit recipe || new recipe > submit recipe
+	async editRecipe (recipe){
+		console.log("-------------editRecipe (recipe) starting...");
+		const sectionTemplate = document.querySelector("head > template.recipe-view");
+		const recipeViewSection = sectionTemplate.content.firstElementChild.cloneNode(true);
+
+		//check if recipe is null
+		if (recipe){
+			console.log("recipe is not null");
+
+			//get new values
+			const recipeAvatar = recipeViewSection.querySelector("img.avatar");
+			const recipeTitle = recipeViewSection.querySelector("input.title");
+			const recipeDescription = recipeViewSection.querySelector("textarea.description");
+			const recipeInstruction = recipeViewSection.querySelector("textarea.instruction");
+			const recipePescatarian = recipeViewSection.querySelector("input.pescatarian");
+			const recipeCategory = recipeViewSection.querySelector("select.category");
+
+			//loop through recived ingredient-types and add to array
+			const recipeIngredients = [];
+			for (const ingredient of recipe.ingredients) {
+				console.log("  +adding ingredient to array: " + ingredient.alias);
+				recipeIngredients.push(ingredient);
+			}
+
+			//button click event add new ingredient-types to new array
+
+			//merge both arrays?
+
+			
+
+		}else{
+			console.log("recipe is null");
+
+			//clean area
+			while (this.centerArticle.lastElementChild.classList.contains("recipe-view"))
+				this.centerArticle.lastElementChild.remove();
+			this.centerArticle.append(recipeViewSection);
+
+
+			//avatar = default avatar
+			recipeViewSection.querySelector("img.avatar").src = "/services/documents/1";
+
+			//unlock all input fields
+			recipeViewSection.querySelector("input.title").readOnly = false;
+			recipeViewSection.querySelector("textarea.description").readOnly = false;
+			recipeViewSection.querySelector("textarea.instruction").readOnly = false;
+			recipeViewSection.querySelector("input.pescatarian").readOnly = false;
+			recipeViewSection.querySelector("select.category").disabled = false;
+
+		}
+
+
 		
 	}
+	*/
+
+	constraintRestrictions (restriction) {
+
+		//how to connected?
+
+	}
+
 
 	async submitData (recipe){
 		console.log("submitData (recipe): " + recipe.title);
+
+		//create clone
+
+		//assign new version number
+
+		//assign new values to input
+
+		// PUT /services/recipes/id
 
 	}
 
@@ -235,31 +354,8 @@ class RecipeEditorController extends Controller {
 		} catch (error) {
 			this.messageElement.value = error.message || "a problem occurred!";
 		}
-
-
-
-		/*
-		const ingredientTypeSection = this.centerArticle.querySelector("section.ingredient-type-editor");
-
-		this.messageElement.value = "";
-		try {
-			if (!dropFile.type || !dropFile.type.startsWith("image/")) throw new RangeError("avatar file must be an image!");
-
-			// PUT /services/ingredient-types/id/avatar
-			const resource = "/services/ingredient-types/" + ingredientType.identity + "/avatar";
-			const response = await fetch(resource, { method: "PUT", headers: { "Content-Type": dropFile.type, "Accept": "text/plain" }, body: dropFile });
-			if (!response.ok) throw new Error("HTTP " + response.status + " " + response.statusText);
-			ingredientType.avatarReference = Number.parseInt(await response.text());
-			this.messageElement.value = "ok";
-
-			ingredientTypeSection.querySelector("img.avatar").src = "/services/ingredient-types/" + ingredientType.identity + "/avatar?cache-bust=" + Date.now();
-		} catch (error) {
-			this.messageElement.value = error.message || "a problem occurred!";
-		}
-		*/
 	}
 }
-
 
 window.addEventListener("load", event => {
 	const controller = new RecipeEditorController();
