@@ -1,0 +1,7 @@
+TODO:
+-add checkbox chec
+-update recipe-view avatar img margin.bottom
+-hide +zutat in recipe search
+-add remove ingredient action
+-add auto checkbox in recipe-editor
+-neues rezept: fix alias

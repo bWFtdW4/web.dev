@@ -160,7 +160,11 @@ class RecipeController extends Controller {
 			ingredientElement.querySelector("select.unit").value = ingredient.unit;
 			ingredientElement.querySelector("input.amount").value = ingredient.amount;
 			ingredientElement.querySelector("img.avatar").src = "/services/documents/" + ingredient.avatarReference;
-			ingredientElement.querySelector("input.alias").value = ingredient.alias;
+			
+			//ingredientElement.querySelector("input.alias").value = ingredient.alias;
+			//change from input to select
+			ingredientElement.querySelector("select.alias").value = ingredient.alias;
+
 			ingredientElement.querySelector("input.pescatarian").checked = ingredient.pescatarian;
 			ingredientElement.querySelector("input.lacto-ovo-vegetarian").checked = ingredient.lactoOvoVegetarian;
 			ingredientElement.querySelector("input.lacto-vegetarian").checked = ingredient.lactoVegetarian;

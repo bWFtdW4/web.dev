@@ -11,8 +11,8 @@
 		<script type="module" src="js/authentication-controller.js"></script>
 		<script type="module" src="js/preferences-controller.js"></script>
 		<script type="module" src="js/ingredient-types-controller.js"></script>
-		<script type="module" src="js/recipe-query-controller.js"></script>
 		<script type="module" src="js/recipe-editor-controller.js"></script>
+		<script type="module" src="js/recipe-query-controller.js"></script>
 
 		<template class="authentication">
 			<section class="authentication">
@@ -20,11 +20,11 @@
 					<legend>Authentifizierung</legend>
 					<div>
 						<label>Email</label>
-						<input class="email default" type="email" />
+						<input class="email default" type="email" required="true" />
 					</div>
 					<div>
 						<label>Passwort</label>
-						<input class="password default" type="password" />
+						<input class="password default" type="password" required="true" />
 					</div>
 				</fieldset>
 				<button class="submit" type="button">ok</button>
@@ -48,7 +48,7 @@
 					</div>
 					<div>
 						<label class="default">Email</label>
-						<input class="email default" type="email" />
+						<input class="email default" type="email" required="true" />
 					</div>
 					<div>
 						<label class="default">Passwort</label>
@@ -63,28 +63,28 @@
 					</div>
 					<div>
 						<label class="default">Nachname</label>
-						<input class="surname default" type="text" />
+						<input class="surname default" type="text" required="true" />
 					</div>
 					<div>
 						<label class="default">Vorname</label>
-						<input class="forename default" type="text" />
+						<input class="forename default" type="text" required="true" />
 					</div>
 				</fieldset>
 				<fieldset>
 					<legend>Adresse</legend>
 					<div>
 						<label class="default">Straße</label>
-						<input class="street default" type="text" />
+						<input class="street default" type="text" required="true" />
 					</div>
 					<div>
 						<label class="default">PLZ</label>
-						<input class="postcode" type="text" />
+						<input class="postcode" type="text" required="true" />
 						<label class="city">Ort</label>
-						<input class="city" type="text" />
+						<input class="city" type="text" required="true" />
 					</div>
 					<div>
 						<label class="default">Staat</label>
-						<input class="country default" type="text" />
+						<input class="country default" type="text" required="true" />
 					</div>
 				</fieldset>
 				<fieldset>
@@ -142,7 +142,7 @@
 				</div>
 				<div>
 					<label class="default">Name</label>
-					<input class="alias default" type="text" />
+					<input class="alias default" type="text" required="true" />
 				</div>
 				<div>
 					<label class="default">Beschreibung</label>
@@ -173,23 +173,23 @@
 		<template class="recipes-query">
 			<section class="recipes-query">
 				<div>
-					<label class="q-title default">Titel</label>
+					<label class="default">Titel</label>
 					<input class="title default" type="text" />
 				</div>
 				<div>
-					<label class="q-description-fragment default">Beschreibung</label>
+					<label class="default">Beschreibung</label>
 					<input class="description-fragment default" type="text" />
 				</div>
 				<div>
-					<label class="q-instruction-fragment default">Anleitung</label>
+					<label class="default">Anleitung</label>
 					<input class="instruction-fragment default" type="text" />
 				</div>
 				<div>
-					<label class="q-owner-email default">Email des Autors</label>
+					<label class="default">Email des Autors</label>
 					<input class="owner-email default" type="text" />
 				</div>
 				<div>
-					<label class="q-restriction default">Restriktion</label>
+					<label class="default">Restriktion</label>
 					<select class="restriction">
 						<option value=""></option>
 						<option value="PESCATARIAN">Pescatarisch</option>
@@ -199,7 +199,7 @@
 					</select>
 				</div>
 				<div>
-					<label class="q-category default">Kategorie</label>
+					<label class="default">Kategorie</label>
 					<select class="category">
 						<option value=""></option>
 						<option value="MAIN_COURSE">Hauptgericht</option>
@@ -214,7 +214,6 @@
 					</select>
 				</div>
 				<button class="search" type="button">suchen</button>
-				<button class="create-new-recipe" type="button">Neues Rezept</button>
 			</section>
 		</template>
 
@@ -240,8 +239,9 @@
 				<div class="control">
 					<button class="backward" type="button"><img src="image/page-backward.png" /></button>
 					<button class="forward" type="button"><img src="image/page-forward.png" /></button>
+					<button class="create" type="button">neu ...</button>
 				</div>
-			</section>	
+			</section>
 		</template>
 
 		<template class="recipe-view-row">
@@ -267,9 +267,9 @@
 				<td class="horizontal-center"><input class="vegan" type="checkbox" disabled="true" /></td>
 			</tr>
 		</template>
-		
-		<template class="recipe-view">
-			<section class="recipe-view">
+
+		<template class="recipe-editor">
+			<section class="recipe-editor">
 				<div class="recipe">
 					<div>
 						<label class="default">Avatar</label>
@@ -279,11 +279,15 @@
 						<div class="left">
 							<div>
 								<label class="default">Titel</label>
-								<input class="title default" type="text" readonly="true" />
+								<input class="title default" type="text" required="true" />
+							</div>
+							<div>
+								<label class="default">Eigner</label>
+								<input class="owner-email default" type="email" readonly="true" />
 							</div>
 							<div>
 								<label class="default">Kategorie</label>
-								<select class="category" disabled="true">
+								<select class="category">
 									<option value="MAIN_COURSE">Hauptgericht</option>
 									<option value="APPETIZER">Vorspeise</option>
 									<option value="SNACK">Snack</option>
@@ -296,45 +300,41 @@
 								</select>
 							</div>
 							<div>
-								<label class="default">Eigner</label>
-								<input class="owner-email default" type="email" readonly="true" />
-							</div>
-							<div>
 								<label class="default vertical-center">Pescatarisch</label>
-								<input class="pescatarian" type="checkbox" disabled="true" />
+								<input class="pescatarian" type="checkbox" />
 							</div>
 							<div>
 								<label class="default vertical-center">Ovolacto-Vegetarisch</label>
-								<input class="lacto-ovo-vegetarian" type="checkbox" disabled="true" />
+								<input class="lacto-ovo-vegetarian" type="checkbox" />
 							</div>
 							<div>
 								<label class="default vertical-center">Lacto-Vegetarisch</label>
-								<input class="lacto-vegetarian" type="checkbox" disabled="true" />
+								<input class="lacto-vegetarian" type="checkbox" />
 							</div>
 							<div>
 								<label class="default vertical-center">Vegan</label>
-								<input class="vegan" type="checkbox" disabled="true" />
+								<input class="vegan" type="checkbox" />
 							</div>
 						</div>
 						<div class="right">
 							<div>
 								<label class="block">Beschreibung</label>
-								<textarea class="description default" type="text" readonly="true"></textarea>
+								<textarea class="description default" type="text"></textarea>
 							</div>
 							<div>
 								<label class="block">Anleitung</label>
-								<textarea class="instruction default" type="text" readonly="true"></textarea>
+								<textarea class="instruction default" type="text"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="table recipe-ingredients">
 					<table>
 						<thead>
 							<tr>
 								<th>Avatar</th>
-								<th >Alias</th>
+								<th>Alias</th>
 								<th>Menge</th>
 								<th>Einheit</th>
 								<th>Pescatarisch</th>
@@ -347,26 +347,23 @@
 						</tbody>
 					</table>
 				</div>
-				<div>
-					<button class="save-recipe-changes" type="button">Änderung Speichern</button>
-					<button class="add-new-ingredient" type="button">+ Zutat</button>
+				<div class="control">
+					<button class="submit" type="button">ok</button>
+					<button class="create" type="button">neu ...</button>
 				</div>
+
 				<div class="recipe-illustrations">
 				</div>
 			</section>
 		</template>
-		
-		<template class="recipe-ingredient-view">
-			<tr class="recipe-ingredient">
-				<td><img class="avatar" src="."/></td>
-				<!-- <td><input class="alias" type="text" readonly="true"/></td> -->
+
+		<template class="ingredient-editor-row">
+			<tr class="ingredient-editor-row">
+				<td><img class="avatar" src="." /></td>
+				<td><select class="alias" /></td>
+				<td><input class="amount" type="number" min="0" step="any" required="true" /></td>
 				<td>
-					<select class="alias" disabled="true">
-						<option></option>
-				</td>
-				<td><input class="amount" type="number" min="0" step="1" readonly="true"/></td>
-				<td>
-					<select class="unit" disabled="true">
+					<select class="unit">
 						<option value="LITRE">Liter</option>
 						<option value="GRAM">Gramm</option>
 						<option value="TEASPOON">Teelöffel</option>
