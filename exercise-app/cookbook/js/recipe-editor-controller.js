@@ -168,8 +168,10 @@ class RecipeEditorController extends Controller {
 		this.centerArticle.append(recipeViewSection);
 
 		//add add-new-ingredient button event
-		recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => console.log("add-new-ingredient pressed"));
-		recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => this.addIngredient (recipe, 	));
+		//recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => console.log("add-new-ingredient pressed"));
+		//recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => this.addIngredient (recipe, 	));
+		recipeViewSection.querySelector("button.add-new-ingredient").addEventListener("click", event => this.displayIngredientsTypes);
+		
 
 		//submitData (recipe)
 		recipeViewSection.querySelector("button.save-recipe-changes").addEventListener("click", event => console.log("2-save-recipe-changes button clicked"));
@@ -211,9 +213,9 @@ class RecipeEditorController extends Controller {
 				ingredientElement.querySelector("input.amount").value = ingredient.amount;
 				ingredientElement.querySelector("img.avatar").src = "/services/documents/" + ingredient.avatarReference;
 				
-				//ingredientElement.querySelector("input.alias").value = ingredient.alias;
+				ingredientElement.querySelector("input.alias").value = ingredient.alias;
 				//change from input to select
-				ingredientElement.querySelector("select.alias").value = ingredient.alias;
+				//ingredientElement.querySelector("select.alias").value = ingredient.alias;
 
 				ingredientElement.querySelector("input.pescatarian").checked = ingredient.pescatarian;
 				ingredientElement.querySelector("input.lacto-ovo-vegetarian").checked = ingredient.lactoOvoVegetarian;
@@ -266,6 +268,8 @@ class RecipeEditorController extends Controller {
 			recipeViewSection.querySelector("input.owner-email").value = this.sessionOwner.email;
 		}
 
+	
+
 
 	
 	}
@@ -312,6 +316,21 @@ class RecipeEditorController extends Controller {
 		}
 
 		console.log("getAllIngredients () finished..." + this.#ingredientsTypes.length);
+	}
+
+
+	async displayIngredientsTypes () {
+		console.log("displayIngredientsTypes () starting...");
+
+		//get the template of ingredient row > clone it
+		const ingredientViewTemplate = document.querySelector("template.recipe-ingredient-view");
+		const ingredientElement = ingredientViewTemplate.content.firstElementChild.cloneNode(true);
+		//get the this.centerArticle of table body > append the clone
+		const ingredientsTable = this.centerArticle.querySelector("div.recipe-ingredients tbody");
+		ingredientsTable.append(ingredientElement);
+
+		//unlock elements
+
 	}
 
 
