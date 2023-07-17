@@ -7,10 +7,13 @@
     </head>
     <body>
         <div id="container">
-            <h3>Game List webservice with jquery</h3>
+            <h3>Epic Game List webservice with jquery</h3>
             <div id = "content"></div>
         </div>
-
+        <div id="add-game">
+            <h6>Add new Game </h6>
+            <button type="button" onclick="">+</button>
+        </div>
         <script>
             function getGameList(data){
                 console.log("game data loading...");
@@ -19,12 +22,10 @@
                 if (data.length == 0){
                     $("<li></li>").html("No games found").appendTo("#content ul");
                 }else{
-                    
+                    $("<li></li>").html(data.length + " games found <br><br>").appendTo("#content ul");
                     $.each(data, function(i, game){
                         $("<li></li>").html(game.name).appendTo("#content ul");
                     });
-
-                              
                 }
             }
 
@@ -45,7 +46,9 @@
                     success: getGameList
                 });
             })
-        
+            
+            
+
         </script>
         
         

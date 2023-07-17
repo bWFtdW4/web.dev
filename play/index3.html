@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="container">
-            <h3>Game List webservice with jquery</h3>
+            <h3>Stean Games List webservice with jquery</h3>
             <div id = "content"></div>
         </div>
 
@@ -52,7 +52,7 @@
 
                 jQuery.ajax({
                     type: "GET",
-                    url: "https://ma1.mshome.net:8001/services/games/epic-all",
+                    url: "https://ma1.mshome.net:8001/services/games/steam-all",
                     dataType: "json",
                     success: getGameList
                 });
