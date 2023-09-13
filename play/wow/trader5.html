@@ -24,6 +24,7 @@
             
             <span>July</span>
             <span>August</span>
+            <span>September</span>
         </section>
         <section class="imageContainer">
             <div id="imageContainer"></div>
@@ -88,8 +89,8 @@
             console.log("getData() called");
             let tenderData;  
             try {
-                // GET services/wow/show
-                const resource = "/services/wow/show";
+                // GET services/wow/showSeptember
+                const resource = "/services/wow/showSeptember";
                 console.log("+++++resource:", resource);
                 const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
                 if (!response.ok) throw new Error(">>>HTTP " + response.status + " " + response.statusText);
@@ -148,7 +149,11 @@
                 imageLink.className = "showImageLink";
                 // maybe add instead of <div id="imageContainer"></div> an attribute to image
                 //imageLink.id = "imageContainer";
-                imageLink.setAttribute("data-avif-image-url", "img/august/" + element.image);
+                //for august:
+                //imageLink.setAttribute("data-avif-image-url", "img/august/" + element.image);
+                
+                //for september:
+                imageLink.setAttribute("data-avif-image-url", "img/september/" + element.image + ".avif");
                 imageLink.textContent = element.image;
                 imageCell.appendChild(imageLink);
                 newRow.appendChild(imageCell);
