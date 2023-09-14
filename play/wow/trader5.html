@@ -1,17 +1,42 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
     <head>
         <meta charset="UTF-8">
         <script>const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};</script>
-        <!-- <script src="./tooltips.js"></script> -->
-        <!-- -->
-        <style>
+        <script src="./tooltips.js"></script>
+        <style>         
+
+            html{
+                /*
+                font-family: "Copperplate", sans-serif;               
+                font-family: "Courier New";
+                font-family: monospace;
+                */
+                
+                font-family: "Lucida Console";
+                font-size: larger;
+                font-style: bold;
+                color: rgb(0, 0, 0);
+            }
+
             body{
-                background-color: rgb(77, 75, 75);
-                font-family:'Courier New', Courier, monospace;
-                color: black;
+                background: url("../wow/img/bg4.jpg") rgb(168, 129, 129);
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+    
+            }
+
+
+            tr:hover {
+                background-color: rgb(206, 194, 190);
+                font-style: bold;
                 
-                
+                /*
+                font-display: bold;
+                font-size: 110%;
+                */
+
             }
 
 
@@ -20,7 +45,7 @@
     </head>
     <body>
         <section class="column1">
-            <h1>Trader:</h1>
+            <h1>Trader</h1>
             
             <span>July</span>
             <span>August</span>
@@ -29,8 +54,9 @@
         <section class="imageContainer">
             <div id="imageContainer"></div>
         </section>
-        <section class="column2">
+        <section class="tenderData">
             <h1>WoW Trading Post</h1>            
+            <!--
             <table id="TenderJuly" hidden>
                 <tbody>
                     <tr>
@@ -60,6 +86,7 @@
                     </tr>
                 </tbody>
             </table>
+            -->
             <table id="TenderSeptember">
                 <tbody>
                     <tr>
@@ -135,6 +162,14 @@
                 const tendiesCell = document.createElement("td");
                 tendiesCell.textContent = element.tendies;
                 newRow.appendChild(tendiesCell);
+                //create checkbox for tendies
+                ////template: <td><input type="checkbox" class="tendiesCheckbox" value="750"></td>
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.className = "tendiesCheckbox";
+                checkbox.value = element.tendies;
+                tendiesCell.appendChild(checkbox);
+
                 
                 //create td for description
                 const descriptionCell = document.createElement("td");
@@ -142,7 +177,7 @@
                 newRow.appendChild(descriptionCell);
 
                 //create table cells for image
-                //template: <td><a href="#" class="showImageLink" data-avif-image-url="img/Spectral Tiger Cub.avif">IMG</a></td>
+                ////template: <td><a href="#" class="showImageLink" data-avif-image-url="img/Spectral Tiger Cub.avif">IMG</a></td>
                 const imageCell = document.createElement("td");
                 const imageLink = document.createElement("a");
                 imageLink.href = "#";
