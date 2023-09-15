@@ -35,7 +35,7 @@
             /*
                 font-display: bold;
                 font-size: 110%;
-                */
+            */
 
         }
     </style>
@@ -44,10 +44,9 @@
 <body>
     <section class="column1">
         <h1>Trader</h1>
-
-        <span>July</span>
-        <span>August</span>
-        <span>September</span>
+        <span id="showJuly"><a href=#>July</a></span>
+        <span id="showAugust"><a href=#>August</a></span>
+        <span id="showSeptember"><a href=#>September</a></span>
     </section>
     <section class="imageContainer">
         <div id="imageContainer"></div>
@@ -92,7 +91,7 @@
                 </tbody>
             </table>
             -->
-        <table id="TenderSeptember">
+        <table id="TenderTable">
             <tbody>
                 <tr>
                     <td width="5%" style="background-color: #aaa">ID</td>
@@ -115,13 +114,17 @@
         getData();
     });
 
+    currentMonth = "August";
+    //currentMonth = "September";
+
+
     // get data from database
     async function getData() {
         console.log("getData() called");
         let tenderData;
         try {
             // GET services/wow/showSeptember
-            const resource = "/services/wow/showSeptember";
+            const resource = "/services/wow/show" + currentMonth;
             console.log("+++++resource:", resource);
             const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
             if (!response.ok) throw new Error(">>>HTTP " + response.status + " " + response.statusText);
@@ -136,8 +139,8 @@
 
     function displayData(tenderData) {
 
-        //assign TenderSeptember tbody to tableBody
-        const tableBody = document.querySelector("#TenderSeptember tbody");
+        //assign TenderTable tbody to tableBody
+        const tableBody = document.querySelector("#TenderTable tbody");
 
         console.log("displayData called");
         if (tenderData.length == 0) {
@@ -187,11 +190,14 @@
                 imageLink.className = "showImageLink";
                 // maybe add instead of <div id="imageContainer"></div> an attribute to image
                 //imageLink.id = "imageContainer";
+                
                 //for august:
                 //imageLink.setAttribute("data-avif-image-url", "img/august/" + element.image);
 
                 //for september:
-                imageLink.setAttribute("data-avif-image-url", "img/september/" + element.image + ".avif");
+                //imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image + ".avif");
+                imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image);
+                console.log(element.image);
                 imageLink.textContent = element.image;
                 imageCell.appendChild(imageLink);
                 newRow.appendChild(imageCell);
@@ -219,7 +225,7 @@
                 const wowheadItemName4 = wowheadItemName3.replace(/[\-]+/g, " ");
                 //console.log("444: " + wowheadItemName4);
                 const wowheadItemName5 = wowheadItemName4.replace(/[]/, "");
-                console.log("555: " + wowheadItemName5);
+                //console.log("555: " + wowheadItemName5);
 
 
                 //wowheadItemName = element.wowhead.replace(/[^a-zA-Z]+/g, "");
@@ -290,6 +296,14 @@
                     }
                 });
             });
+
+            //click event listener for the month buttons
+            const showJuly = document.getElementById("showJuly");
+            const showAugust = document.getElementById("showAugust");
+
+            const showSeptember = document.getElementById("showSeptember");
+            showAugust.addEventListener
+
 
         }
     }
