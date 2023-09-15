@@ -24,9 +24,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
-
         }
-
 
         tr:hover {
             background-color: rgb(206, 194, 190);
@@ -36,8 +34,29 @@
                 font-display: bold;
                 font-size: 110%;
             */
-
         }
+
+        .TenderTableHead{
+            width: 5%; background-color: #aaa;
+            width: 20%; background-color: #bbb;
+            width: 10%; background-color: #ccc;
+            width: 20%; background-color: #ddd;
+            width: 10%; background-color: #eee;
+            width: 10%; background-color: #fff;
+            width: 10%; background-color: #ffff;
+        }
+
+        .TenderTable{
+            width: 5%;
+            width: 20%;
+            width: 10%;
+            width: 20%;
+            width: 10%;
+            width: 10%;
+            width: 10%;
+        }
+        
+
     </style>
 </head>
 
@@ -91,7 +110,7 @@
                 </tbody>
             </table>
             -->
-        <table id="TenderTable">
+        <table id="TenderTableHead">
             <tbody>
                 <tr>
                     <td width="5%" style="background-color: #aaa">ID</td>
@@ -104,6 +123,10 @@
                 </tr>
             </tbody>
         </table>
+        <table id="TenderTable">
+            <tbody>
+            </tbody>
+        </table>
     </section>
 </body>
 
@@ -114,8 +137,37 @@
         getData();
     });
 
-    currentMonth = "August";
-    //currentMonth = "September";
+    function clearTable() {
+        //console.log("clearTable() called");
+        const tableBody = document.querySelector("#TenderTable tbody");
+        tableBody.innerHTML = "";
+    }
+    
+    //click event listener for the month buttons
+    const showJuly = document.getElementById("showJuly");
+            
+            
+    const showAugust = document.getElementById("showAugust");
+    showAugust.addEventListener('click', function (event) {
+        // Prevent the default link behavior
+        event.preventDefault();
+        //console.log("showAugust clicked");
+        currentMonth = "August";
+        console.log("currentMonth: " + currentMonth);
+        clearTable();
+        getData();
+    });
+
+    const showSeptember = document.getElementById("showSeptember");
+    showSeptember.addEventListener('click', function (event) {
+        // Prevent the default link behavior
+        event.preventDefault();
+        //console.log("showSeptember clicked");
+        currentMonth = "September";
+        console.log("currentMonth: " + currentMonth);
+        clearTable();
+        getData();
+    });
 
 
     // get data from database
@@ -195,10 +247,13 @@
                 //imageLink.setAttribute("data-avif-image-url", "img/august/" + element.image);
 
                 //for september:
-                //imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image + ".avif");
-                imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image);
-                console.log(element.image);
+                imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image + ".avif");
+                //imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image);
+                
+                console.log("image: " + element.image);
                 imageLink.textContent = element.image;
+                console.log(">>>><element.image: " + element.image);
+                
                 imageCell.appendChild(imageLink);
                 newRow.appendChild(imageCell);
 
@@ -296,13 +351,6 @@
                     }
                 });
             });
-
-            //click event listener for the month buttons
-            const showJuly = document.getElementById("showJuly");
-            const showAugust = document.getElementById("showAugust");
-
-            const showSeptember = document.getElementById("showSeptember");
-            showAugust.addEventListener
 
 
         }
