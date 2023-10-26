@@ -36,6 +36,16 @@
             */
         }
 
+        th, td {
+            width: 5%;
+            width: 20%;
+            width: 10%;
+            width: 20%;
+            width: 10%;
+            width: 10%;
+            width: 10%;
+        }
+/*
         .TenderTableHead{
             width: 5%;
             width: 20%;
@@ -44,15 +54,6 @@
             width: 10%;
             width: 10%;
             width: 10%;
-            /*
-            width: 5%; background-color: #aaa;
-            width: 20%; background-color: #bbb;
-            width: 10%; background-color: #ccc;
-            width: 20%; background-color: #ddd;
-            width: 10%; background-color: #eee;
-            width: 10%; background-color: #fff;
-            width: 10%; background-color: #ffff;
-            */
         }
 
         .TenderTable{
@@ -64,7 +65,7 @@
             width: 10%;
             width: 10%;
         }
-        
+*/
 
     </style>
 </head>
@@ -89,17 +90,6 @@
             </span>
         </div>
         <table id="TenderTableHead">
-            <tbody>
-                <tr>
-                    <td width="5%" style="background-color: #aaa">ID</td>
-                    <td width="20%" style="background-color: #bbb">Item</td>
-                    <td width="10%" style="background-color: #ccc">Tendies</td>
-                    <td width="20%" style="background-color: #ddd">Description</td>
-                    <td width="10%" style="background-color: #eee">Image</td>
-                    <td width="10%" style="background-color: #fff">wowhead link</td>
-                    <td width="10%" style="background-color: #ffff">wowhead id</td>
-                </tr>
-            </tbody>
         </table>
         <table id="TenderTable">
             <tbody>
@@ -114,12 +104,27 @@
         getData();
     });
 
+    /*
+    * console.log("clearTable() called");
+    */
     function clearTable() {
-        /*
-        * console.log("clearTable() called");
-        */
         const tableBody = document.querySelector("#TenderTable tbody");
         tableBody.innerHTML = "";
+    }
+
+    function addHead(){
+        /*
+        * add head to table:
+        * head: ID	Item	Tendies	Description	Image	wowhead link	wowhead id
+        */
+        const columnName = ["ID", "Item", "Tendies", "Description", "Image", "Wowhead Link", "Wowhead ID"];
+        const tableHeadRow = document.createElement("tr");
+
+        columnName.forEach(headElement => {
+            const tableHeadCell = document.createElement("th");
+            tableHeadCell.textContent = headElement;
+            tableHeadRow.appendChild(tableHeadCell);
+        });
     }
     
     /*
@@ -136,6 +141,7 @@
         currentMonth = "August";
         console.log("currentMonth: " + currentMonth);
         clearTable();
+        addHead();
         getData();
     });
 
@@ -149,6 +155,7 @@
         currentMonth = "September";
         console.log("currentMonth: " + currentMonth);
         clearTable();
+        addHead();
         getData();
     });
 
@@ -160,12 +167,9 @@
         console.log("getData() called");
         let tenderData;
         try {
-            /*
-            * GET services/wow/showSeptember
-            */
-            const resource = "/services/wow/show" + currentMonth;
+            const resource = "getData" + currentMonth + ".php";
             console.log("+++++resource:", resource);
-            const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
+            const response = await fetch(resource);
             if (!response.ok) throw new Error(">>>HTTP " + response.status + " " + response.statusText);
             tenderData = await response.json();
             console.log(".......tenderData Lennght: " + tenderData.length);
@@ -181,8 +185,11 @@
         * assign TenderTable tbody to tableBody
         */
         const tableBody = document.querySelector("#TenderTable tbody");
-
+        const newRow = document.createElement("tr");
         console.log("displayData called");
+        /*
+        * check if data is empty
+        */
         if (tenderData.length == 0) {
             console.log("No data found");
         } else {
@@ -206,34 +213,36 @@
                 idCell.textContent = element.id;
                 newRow.appendChild(idCell)
                 
-                
-                /*
-                * create td for item-name ++ wowheadlink
-                */
+               /*
+               * create td for item-name ++ wowheadlink
+               * add href for tooltip
+               * template: <td><a href="https://www.wowhead.com/item=49343/"></a></td>
+               */
                 const itemCell = document.createElement("td");
-            
-                /*
-                * add href for tooltip
-                */
                 const wowheadlink = document.createElement("a");
                 wowheadlink.href = element.wowhead;
-                
+                console.log("element.wowhead: " + element.wowhead);
                 /*
                 * clean the wowhead link
                 */
-                const wowheadLinkUrl = element.wowhead;
-                const wowheadLinkUrlParts = wowheadLinkUrl.split("/");
+                //const wowheadLinkUrl = element.wowhead;
+                const wowheadLinkUrlParts = element.wowhead.split("/");
                 const cleanWowheadlink = wowheadLinkUrlParts.slice(0, 5).join("/");
-                cleanWowheadlink.href = cleanWowheadlink;
+                wowheadlink.href = cleanWowheadlink;
                 console.log("cleanWowheadlink: " + cleanWowheadlink);
-                
                 /*
-                * add name
+                * add item-name
                 */
-                itemCell.textContent = element.item;
-                itemCell.href = cleanWowheadlink;
+                wowheadlink.textContent = element.item;
                 itemCell.appendChild(wowheadlink);
                 newRow.appendChild(itemCell);
+                /*
+                * old method: deprecated
+                */
+                //itemCell.textContent = element.item;
+                //itemCell.href = cleanWowheadlink;
+                //itemCell.appendChild(wowheadlink);
+                //newRow.appendChild(itemCell);
 
                 /*
                 * create td for tendies
@@ -241,7 +250,6 @@
                 const tendiesCell = document.createElement("td");
                 tendiesCell.textContent = element.tendies;
                 newRow.appendChild(tendiesCell);
-                
                 /*
                 * create checkbox for tendies
                 * template: <td><input type="checkbox" class="tendiesCheckbox" value="750"></td>
@@ -267,24 +275,22 @@
                 const imageLink = document.createElement("a");
                 imageLink.href = "#";
                 imageLink.className = "showImageLink";
-                // maybe add instead of <div id="imageContainer"></div> an attribute to image
+                /*
+                * maybe add instead of <div id="imageContainer"></div> an attribute to image
+                */
                 //imageLink.id = "imageContainer";
-                
                 /*
                 * for august:
                 */
                 //imageLink.setAttribute("data-avif-image-url", "img/august/" + element.image);
-
                 /*
                 * for september:
                 */
                 imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image + ".avif");
                 //imageLink.setAttribute("data-avif-image-url", "img/" + currentMonth + "/" + element.image);
-                
                 //console.log("image: " + element.image);
                 imageLink.textContent = element.image;
                 //console.log(">>>><element.image: " + element.image);
-                
                 imageCell.appendChild(imageLink);
                 newRow.appendChild(imageCell);
 

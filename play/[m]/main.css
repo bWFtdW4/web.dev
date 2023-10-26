@@ -1,0 +1,68 @@
+body {
+    background-color: rgb(206, 190, 190);
+    font-family: monospace;
+    font-size: large;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu {
+    width: 10%;
+    padding: 20px;
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    padding-top: 40px;
+}
+
+a:link {
+    color: rgb(145, 30, 155);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: rgb(145, 30, 155);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: line-through;
+}
+
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+#letter-menu {
+    width: 100px;
+    float: left;
+    padding: 10px;
+}
+
+button {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#content {
+    margin-left: 120px; /* Adjust as needed */
+    padding: 20px;
+}

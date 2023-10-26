@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script>const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};</script>
+        <!-- <script src="./tooltips.js"></script> -->
+        <!-- -->
+        <style>
+            body{
+                background-color: rgb(77, 75, 75);
+                font-family:'Courier New', Courier, monospace;
+                color: black;
+                
+                
+            }
+
+
+            
+        </style>
+    </head>
+    <body>
+        <section class="column1">
+            <h1>Trader:</h1>
+            
+            <span>July</span>
+            <span>August</span>
+        </section>
+        <section class="imageContainer">
+            <div id="imageContainer"></div>
+        </section>
+        <section class="column2">
+            <h1>WoW Trading Post</h1>            
+            <table id="TenderJuly" hidden>
+                <tbody>
+                    <tr>
+                        <td width="35%" style="background-color: #aaa">Item</td>
+                        <td width="10%" style="background-color: #bbb">Tendies</td>
+                        <td width="50%" style="background-color: #ccc">Description</td>
+                        <td width="5%" style="background-color: #ddd">IMG</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.wowhead.com/item=49343/"></a></td>
+                        <td>750</td>
+                        <td>Battle Pet - formerly TCG item</td>
+                        <td><a href="#" class="showImageLink" data-avif-image-url="img/july/Spectral Tiger Cub.avif">IMG</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="TenderAugust">
+                <tbody>
+                    <tr>
+                        <td width="5%" style="background-color: #aaa">ID</td>
+                        <td width="20%" style="background-color: #bbb">Item</td>
+                        <td width="10%" style="background-color: #ccc">Tendies</td>
+                        <td width="20%" style="background-color: #ddd">Description</td>
+                        <td width="10%" style="background-color: #eee">Image</td>
+                        <td width="10%" style="background-color: #fff">wowhead link</td>
+                        <td width="10%" style="background-color: #ffff">wowhead id</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="TenderSeptember">
+                <tbody>
+                    <tr>
+                        <td width="5%" style="background-color: #aaaa">ID</td>
+                        <td width="20%" style="background-color: #bbb">Item</td>
+                        <td width="10%" style="background-color: #ccc">Tendies</td>
+                        <td width="20%" style="background-color: #ddd">Description</td>
+                        <td width="10%" style="background-color: #eee">Image</td>
+                        <td width="10%" style="background-color: #fff">wowhead link</td>
+                        <td width="10%" style="background-color: #ffff">wowhead id</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </body>
+</html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM loaded and ready to go!");
+        getData();
+        
+
+    });
+
+    // get data from database
+    async function getData(){
+            console.log("getData() called");
+            let tenderData;  
+            try {
+                // GET services/wow/show
+                const resource = "/services/wow/show";
+                console.log("+++++resource:", resource);
+                const response = await fetch(resource, { method: "GET", headers: { "Accept": "application/json" } });
+                if (!response.ok) throw new Error(">>>HTTP " + response.status + " " + response.statusText);
+                tenderData = await response.json();
+                console.log(".......tenderData Lennght: " + tenderData.length);
+            } catch (error) {
+                console.log("!!!!!! ERROR !!!!!!!");
+                return;
+            }
+            displayData(tenderData);
+        }
+
+    function displayData(tenderData){
+
+        //assign TenderSeptember tbody to tableBody
+        const tableBody = document.querySelector("#TenderSeptember tbody");
+
+        console.log("displayData called");
+        if (tenderData.length == 0){
+            console.log("No data found");
+        }else{
+            //add data to table:
+            tenderData.forEach(element =>{
+                //console.log(element.id + " " + element.item);
+                //console.log(element);
+                //console.log("_________________________")
+
+                //create table row
+                const newRow = document.createElement("tr");
+                
+                //create td for id
+                const idCell = document.createElement("td");
+                idCell.textContent = element.id;
+                newRow.appendChild(idCell)
+
+                //create td for item
+                const itemCell = document.createElement("td");
+                itemCell.textContent = element.item;
+                newRow.appendChild(itemCell);
+                
+                //create td for tendies
+                const tendiesCell = document.createElement("td");
+                tendiesCell.textContent = element.tendies;
+                newRow.appendChild(tendiesCell);
+                
+                //create td for description
+                const descriptionCell = document.createElement("td");
+                descriptionCell.textContent = element.description;
+                newRow.appendChild(descriptionCell);
+
+                //create table cells for image
+                //template: <td><a href="#" class="showImageLink" data-avif-image-url="img/Spectral Tiger Cub.avif">IMG</a></td>
+                const imageCell = document.createElement("td");
+                const imageLink = document.createElement("a");
+                imageLink.href = "#";
+                imageLink.className = "showImageLink";
+                // maybe add instead of <div id="imageContainer"></div> an attribute to image
+                //imageLink.id = "imageContainer";
+                imageLink.setAttribute("data-avif-image-url", "img/august/" + element.image);
+                imageLink.textContent = element.image;
+                imageCell.appendChild(imageLink);
+                newRow.appendChild(imageCell);
+
+
+                //crete td for wowhead link
+                const wowheadCell = document.createElement("td");
+                wowheadCell.textContent = element.wowhead;
+                newRow.appendChild(wowheadCell);
+
+                // get wowhead id from wowhead link
+                const wowheadidCell = document.createElement("td");
+                const wowheadid = element.wowhead.replace(/[^0-9]+/g, "");
+                //console.log("wowheadid: " + wowheadid);
+                wowheadidCell.textContent = wowheadid;
+                newRow.appendChild(wowheadidCell);
+                
+                //get itemname from wowhead link
+                const wowheadNameCell = document.createElement("td");
+                const wowheadItemName = element.wowhead.replace("https://www.wowhead.com/", "");
+                //console.log("111" + wowheadItemName);
+                const wowheadItemName2 = wowheadItemName.replace(/[a-zA-Z\=(^0-9)()]+/, "");
+                //console.log("222: " + wowheadItemName2);
+                const wowheadItemName3 = wowheadItemName2.replace(/[\/]/, "");
+                //console.log("333: " + wowheadItemName3);
+                const wowheadItemName4 = wowheadItemName3.replace(/[\-]+/g, " ");
+                //console.log("444: " + wowheadItemName4);
+                const wowheadItemName5 = wowheadItemName4.replace(/[]/, "");
+                console.log("555: " + wowheadItemName5);
+
+                
+                //wowheadItemName = element.wowhead.replace(/[^a-zA-Z]+/g, "");
+
+
+            /*   
+                //create td for wowheadid
+                const wowheadidCell = document.createElement("td");
+                wowheadidCell.textContent = element.wowheadid;
+                newRow.appendChild(wowheadidCell);
+            */                
+               //add row to table
+                tableBody.appendChild(newRow);
+            })
+
+            // click event listener to all elements with the class "showImageLink"
+            const showImageLinks = document.querySelectorAll('.showImageLink');
+            showImageLinks.forEach(element => {
+                element.addEventListener('click', function(event) {
+                    // Prevent the default link behavior
+                    event.preventDefault();
+
+                    // Get the AVIF image URL from the data attribute
+                    const avifImageUrl = element.dataset.avifImageUrl;
+
+                    console.log("Link clicked! AVIF Image URL:", avifImageUrl);
+
+                    //set the image container to the clicked image, src = avifImageUrl
+                    document.getElementById("imageContainer").innerHTML = '<img src="' + avifImageUrl + '" alt="Image" width="100%" height="100%">';
+
+                    // go to imageContainer
+                    const topAnchor = document.getElementById("imageContainer");
+                    topAnchor.scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById("imageContainer").scrollIntoView({behavior: "auto"});
+                });
+            });
+
+            // click event listener when the image is clicked to remove the image
+            const imageContainer = document.getElementById("imageContainer");
+            imageContainer.addEventListener('click', function(event) {
+                // Prevent the default link behavior
+                event.preventDefault();
+
+                //set the image container to empty
+                document.getElementById("imageContainer").innerHTML = '';
+            });
+        }
+    }
+
+    
+
+
+
+
+
+</script>

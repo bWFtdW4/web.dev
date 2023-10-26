@@ -1,0 +1,36 @@
+body {
+    background-color: rgb(206, 190, 190);
+    font-family: monospace;
+    font-size: large;
+    display: flex;
+    justify-content: space-between;
+}
+.menu-container {
+    width: 10%;
+}
+.content-container {
+    width: 90%;
+}
+a:link {
+    color: rgb(145, 30, 155);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: rgb(145, 30, 155);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: line-through;
+}
+
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}

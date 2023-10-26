@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[M]</title>
+    <style>
+        body {
+            background-color: rgb(206, 190, 190);
+            font-family: monospace;
+            font-size: large;
+            display: flex;
+            justify-content: space-between;
+        }
+        .menu-container {
+            width: 10%;
+        }
+        .content-container {
+            width: 90%;
+        }
+        a:link {
+            color: rgb(145, 30, 155);
+            background-color: transparent;
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: rgb(145, 30, 155);
+            background-color: transparent;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: red;
+            background-color: transparent;
+            text-decoration: line-through;
+        }
+
+        a:active {
+            color: yellow;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <div class="menu-item"><a href="#" id="g-link">[G]</a></div>
+        <div class="menu-item"><a href="#" id="r-link">[R]</a></div>
+        <div class="menu-item"><a href="#" id="w-link">[W]</a></div>
+    </div>
+    <div class="content-container" id="content-container">
+    </div>
+    <script>
+        const gLink = document.getElementById('g-link');
+        const rLink = document.getElementById('r-link');
+        const wLink = document.getElementById('w-link');
+        const contentContainer = document.getElementById('content-container');
+
+        function loadContent(contentLink){
+            fetch(contentLink)
+                .then(response => response.text())
+                .then(content => {
+                    contentContainer.innerHTML = content;
+                });
+        }
+
+        gLink.addEventListener('click', () => {
+            loadContent('./g/gantt.html');
+        });
+
+        rLink.addEventListener('click', () => {
+            loadContent('./r/finger.html');
+        });
+
+        wLink.addEventListener('click', () => {
+            loadContent('./w/trader7.html');
+        });
+        
+    </script>
+</html>
+

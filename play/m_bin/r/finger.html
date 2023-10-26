@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finger Roulette</title>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: flex-end;
+            /*
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            background-color: #f0f0f0;
+*/
+        }
+
+        img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <img id="display" src="/r/zahl0.jpg" alt="Image Roulette">
+    <button id="spin">Spin</button>
+
+    <script>
+        console.log("start your fingerjs");
+
+        function initializeRoulette() {
+            console.log("initializeRoulette");
+
+            const images = [
+                "zahl0.jpg",
+                "zahl1.jpg",
+                "zahl2.jpg",
+                "zahl3.jpg",
+                "zahl4.jpg",
+                "zahl5.jpg",
+                "zahl6.jpg",
+                "zahl7.jpg",
+                "zahl8.jpg",
+                "zahl9.jpg",
+            ];
+
+            const display = document.getElementById("display");
+            const spinButton = document.getElementById("spin");
+
+            spinButton.addEventListener("click", spinMe);
+            spinButton.addEventListener("click", initializeRoulette);
+
+            function spinMe() {
+                console.log("spinMe");
+                var index = 0;
+                var iterations = 3;
+                var delay = 50;
+
+                function displayNextImage() {
+                    if (index === images.length * iterations) {
+                        spinRoulette();
+                        return;
+                    }
+
+                    setTimeout(function () {
+                        display.src = images[index % images.length];
+                        index++;
+                        displayNextImage();
+                    }, delay);
+                }
+
+                displayNextImage();
+            }
+
+            function spinRoulette() {
+                console.log("spinRoulette");
+                const randomIndex = Math.floor(Math.random() * images.length);
+                const imageUrl = images[randomIndex];
+                display.src = imageUrl;
+                //display.src = "./r/" + imageUrl;
+            }
+
+            window.addEventListener("load", initializeRoulette);
+        }
+    </script>
+</body>
+
+</html>
